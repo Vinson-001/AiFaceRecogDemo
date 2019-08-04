@@ -1,0 +1,133 @@
+/*
+ *全局变量
+ */
+
+
+/*
+ *全局无焦点虚边框,全局文字颜色,全局字号
+ */
+
+*
+{
+    outline:0px;
+    color:#FEFEFE;
+}
+/*
+ *主窗体背景
+ */
+
+QWidget#DeviceMangerWindow
+{
+    border-image:url(:/qrc/image/bk2.jpg);
+}
+/*
+ *标题字体大小
+ */
+QLabel#labTitle
+{
+    font:25px;
+
+}
+
+/*
+ * 设置pushbutton 透明无边界
+ */
+ QPushButton
+ {
+    background:none;
+    border:none;
+    min-width:45px;
+    max-width:45px;
+ }
+  QPushButton#btnReTurnMenu:hover
+  {
+    color:#B0F4D6
+  }
+ /*
+  * 设置toolbutton 透明无边界
+  */
+ QToolButton
+  {
+     font:18px;
+     border:none;
+     border-radius:2px;      /* 圆角边距 */
+     padding:2px;
+     qproperty-iconSize:50px 50px; /* 图标大小 */
+     font-weight:bold ;       /* 字体加粗 */
+  }
+  QToolButton#btnDevice
+  {
+     background:none;
+
+  }
+  QToolButton#btnDevFind
+  {
+     font:14px;
+     background:none;
+     min-width:100px;
+     min-height:30px;
+     qproperty-iconSize:30px 30px; /* 图标大小 */
+  }
+  QToolButton#btnDevFind:hover
+  {
+    color:#B0F4D6
+  }
+
+  QToolButton#btnAdd
+  {
+    font:14px;
+    background:none;
+    min-width:70px;
+    min-height:30px;
+    qproperty-iconSize:30px 30px; /* 图标大小 */
+  }
+  QToolButton#btnAdd:hover
+  {
+    color:#B0F4D6
+  }
+  QToolButton#btnDelete
+  {
+    font:14px;
+    background:none;
+    min-width:70px;
+    min-height:30px;
+    qproperty-iconSize:30px 30px; /* 图标大小 */
+  }
+  QToolButton#btnDelete:hover
+  {
+    color:#B0F4D6
+  }
+
+/*
+* 以下设置tabelview
+*/
+QTableView {
+
+   min-height:270;
+   min-width:830;
+   color: rgb(0, 0, 0);
+   font:14px;
+   /*border: 1px solid #C07010;*/          /*边框颜色*/
+   border:none;
+   gridline-color:#C07010;             /*grid线颜色*/
+   background-color: rgba(20, 20, 20,15);
+   alternate-background-color: rgb(200, 200, 200); /*行交替颜色*/
+   selection-background-color: rgb(130, 190, 100); /*选中行背景颜色*/
+
+}
+
+QTableView::item:!alternate:!selected{
+    background-color: rgb(220, 220, 220);    /*交替行的另一颜色*/
+
+}
+
+QHeaderView::section{
+
+    font:bold 14px;
+    background: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(80, 80, 80, 255), stop:1 rgba(30, 30, 30, 255));
+    color: rgb(240, 240, 240);
+    padding-left: 4px;
+    border: 1px solid #C07010;
+    min-height: 40px;
+
+}

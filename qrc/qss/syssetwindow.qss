@@ -1,0 +1,213 @@
+/*
+ *全局变量
+ */
+
+
+/*
+ *全局无焦点虚边框,全局文字颜色,全局字号
+ */
+
+*
+{
+    outline:0px;
+    color:#FEFEFE;
+}
+/*
+ *主窗体背景
+ */
+
+QWidget#SysSetWindow
+{
+    border-image:url(:/qrc/image/bk2.jpg);
+}
+/*
+ *标题字体大小
+ */
+QLabel#labTitle
+{
+    font:25px;
+
+}
+/*
+ *顶部导航
+ */
+QWidget[flag=\"nav\"]
+{
+    background:qlineargradient(spread:pad,x1:0,y1:0,x2:0,y2:1,stop:0 #00688B,stop:1 #093746);
+}
+
+QWidget[flag=\"nav\"] QAbstractButton
+{
+    background:none;
+    border:none;
+    min-width:45px;
+    max-width:45px;
+}
+
+/*
+ * 设置pushbutton 透明无边界
+ */
+ QPushButton
+ {
+    background:none;
+    border:none;
+    min-width:45px;
+    max-width:45px;
+ }
+  QPushButton#btnReTurnMenu:hover
+  {
+    color:#B0F4D6
+  }
+ /*
+  * 设置toolbutton 透明无边界
+  */
+ QToolButton
+  {
+     font:18px;
+     border:none;
+     border-radius:2px;      /* 圆角边距 */
+     padding:2px;
+     qproperty-iconSize:45px 45px; /* 图标大小 */
+     font-weight:bold        /* 字体加粗 */
+
+  }
+  QToolButton#btnSysSet
+  {
+     qproperty-geometry:10px 10px 150px 60px;
+     background:none
+
+  }
+  QLabel{
+      font:16px;
+  }
+  QCheckBox{
+      font:14px;
+      border-radius:8px;
+      spacing: 4px;
+      color: white;
+      min-height:24px
+  }
+  QCheckBox::indicator {
+      width: 60px;
+      height: 24px;
+  }
+  QCheckBox::indicator:unchecked {
+      image: url(:/qrc/image/switchOff1.png);
+  }
+
+
+  QCheckBox::indicator:checked {
+      image: url(:/qrc/image/switchOn1.png);
+  }
+
+  /*QGroupBox {
+      font: bold;
+      border: 1px solid silver;
+      border-radius: 6px;
+      margin-top: 6px;
+  }
+
+  QGroupBox::title {
+      subcontrol-origin: margin;
+      subcontrol-position: top left;
+      padding: 0px 2px 0px 2px;
+  }*/
+
+/*
+* 以下设置tabelview
+*/
+QTableView {
+
+    min-height:270;
+    min-width:830;
+   color: rgb(0, 0, 0);
+   font:14px;
+   border: 1px solid #C07010;          /*边框颜色*/
+   gridline-color:#C07010;             /*grid线颜色*/
+   /*background-color: rgb(20, 20, 20);*/
+   alternate-background-color: rgb(200, 200, 200); /*行交替颜色*/
+   selection-background-color: rgb(130, 190, 100); /*选中行背景颜色*/
+
+}
+
+QTableView::item:!alternate:!selected{
+    background-color: rgb(220, 220, 220);    /*交替行的另一颜色*/
+
+
+}
+
+QTableView::item{
+    /*min-height: 25px;*/
+}
+QHeaderView::section{
+
+    font:bold 14px;
+    background: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(80, 80, 80, 255), stop:1 rgba(30, 30, 30, 255));
+    color: rgb(240, 240, 240);
+    padding-left: 4px;
+    border: 1px solid #C07010;
+    min-height: 50px;
+
+}
+/*
+*水平/垂直表头样式
+*/
+/*QHeaderView {
+    color: white;
+    font: bold 10pt;
+    background-color: rgb(108, 108, 108);/*设置表头空白区域背景色*/
+    /*border: 0px solid rgb(144, 144, 144);*//* 设置边框属性 */
+    /*border:0px solid rgb(191,191,191);*/
+    /*border-left-color: rgba(255, 255, 255, 0);*/
+    /*border-top-color: rgba(255, 255, 255, 0);*/
+    border-radius:0px;
+    min-height:29px;
+}*/
+
+
+
+
+
+/*QHeaderView#hHeader::section {
+    background-color:darkcyan;
+    color: red;padding-left: 4px;
+    border: 1px solid #6c6c6c;
+    height:40;
+}*/
+/*QHeaderView#vHeader::section {
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1,stop:0 #616161, stop: 0.5 yellow,stop: 0.6 green, stop:1 cyan);
+    color: white;padding-left: 4px;border: 1px solid #6c6c6c;
+    width:30;
+}*/
+
+/*QTableView 左上角样式*/
+/*QTableView QTableCornerButton::section {
+
+    color: white;                       /*文字颜色*/
+    background-color: rgb(41, 139, 201);/*背景色*/
+    border: 5px solid #418bc9;          /*边框*/
+    border-radius:0px;                  /*边框圆角*/
+    border-color: rgb(41, 139, 201);    /*边框颜色*/
+    font: bold 11pt;                    /*字体大小*/
+    padding:12px 0 0 10px;              /*内边距*/
+ }*/
+ /*
+ *水平表头和垂直表头根据表头的objectname进行区分
+ */
+/*QHeaderView#hHeader::section {
+    color: white;
+    background-color: rgb(41, 139, 201);
+    border: 5px solid #f6f7fa;
+    border-radius:0px;
+    border-color: white
+}*/
+
+/*QHeaderView#vHeader::section {
+    color: white;
+    background-color: rgb(41, 139, 201);
+    border: 5px solid #f6f7fa;
+    border-radius:0px;
+    border-color: rgb(41, 139, 201);
+}*/
+
+
