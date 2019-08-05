@@ -38,6 +38,7 @@ private:
     void addTabelViewRow(QList<QString> listText);
     void removeTableRow();
     void removeAllRow();
+    void createXmlForUdp();
 public:
     void initDevDiscovery();
     void startDevSendThread();

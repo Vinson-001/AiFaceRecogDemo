@@ -101,6 +101,7 @@ void DeviceMangerWindow::initNav()
 
    m_strfilePath = QDir::currentPath();
    m_strfilePath += "/DevInfo.xml";
+   //createXmlForUdp();
 
 }
 /*
@@ -170,6 +171,15 @@ void DeviceMangerWindow::removeTableRow()
 void DeviceMangerWindow::removeAllRow()
 {
     m_tableviewModel->removeRows(0,m_tableviewModel->rowCount());
+}
+
+void DeviceMangerWindow::createXmlForUdp()
+{
+    CDomXmlAnalysis domxml(m_strfilePath,"");
+    domxml.CreateDomXml(DevInfoUdpType);
+    QList<QString> strlist;
+    strlist << "" << "" << "" << "" << "";
+    domxml.DeleteXml(DevInfoUdpType,"delete",strlist);
 }
 
 void DeviceMangerWindow::initDevDiscovery()

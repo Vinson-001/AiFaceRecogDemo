@@ -106,13 +106,16 @@ void DevSendThread::udpRecvData()
      bool isUpdate = false;
      int count = 0;
      QList<QList<QString>> strListList;
+     QList<QString> strListId;
 
     if (!m_udpSocket || !m_isStop) {
         qDebug() << "break recvdata";
         return;
     }
+    if(strListId.isEmpty())
+        strListId.cend();
     while (m_udpSocket->hasPendingDatagrams()) {
-
+        QThread::msleep(1000);
         QMutexLocker locker(&m_stopMutex);
 
 
@@ -137,17 +140,24 @@ void DevSendThread::udpRecvData()
             /*2.1 解析临时xml */
             domxml.ReadXmlTemp(DevInfoUdpType);
             /*3. 保存id：ip */
+
             QList<QString> strListDevInfo;
             QString strId = domxml.m_strLisTemp.at(0);
-            strListDevInfo << domxml.m_strLisTemp.at(1) << domxml.m_strLisTemp.at(2) \
+            strListId.append(strId);
+            strListDevInfo << strId << domxml.m_strLisTemp.at(1) << domxml.m_strLisTemp.at(2) \
                     << domxml.m_strLisTemp.at(3) << recv_ip << tr("在线");
             /*4. 保存xml*/
-            domxml.UpdateXml(DevInfoUdpType,strId,strListDevInfo);
+            //domxml.UpdateXml(DevInfoUdpType,strId,strListDevInfo);
             //qDebug() << strId << strListDevInfo <<;
+            strListList.append(strListDevInfo);
             count++;
         }
     }
-    /*发射信号*/
+    /*4. 保存xml*/
+    CDomXmlAnalysis domxml(m_strfilePath,m_strfileTempPath);
+    domxml.UpdateXml(DevInfoUdpType,strListId,strListList);
+    /*5. 发射信号*/
+
     isUpdate = true;
     emit startUpdateDevInfo(isUpdate);
     qDebug() << count;
