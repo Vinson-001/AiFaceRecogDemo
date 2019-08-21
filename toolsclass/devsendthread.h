@@ -6,7 +6,6 @@
 #include <QUdpSocket>
 #include <QTimer>
 #include <QFile>
-#include "./toolsclass/cdomxmlanalysis.h"
 
 class QFile;
 class DevSendThread : public QObject

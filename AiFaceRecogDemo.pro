@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2019-07-22T18:40:42
+# Project created by QtCreator 2019-08-09T10:12:24
 #
 #-------------------------------------------------
 
@@ -18,42 +18,45 @@ UI_DIR      = temp/ui
 OBJECTS_DIR = temp/obj
 
 SOURCES += main.cpp\
-        clogindlg.cpp \
+        logindlg.cpp \
+    menu/menuwindow.cpp \
+    systemset/syssetwindow.cpp \
+    faceRecog/facerecogwindow.cpp \
     uilib/iconhelper.cpp \
-    menuwindow.cpp \
-    bkgroupwindow.cpp \
-    syssetwindow.cpp \
-    facerecogwindow.cpp \
-    toolsclass/chttpclient.cpp \
-    toolsclass/canalysisxml.cpp \
-    deviceMangerwindow.cpp \
-    toolsclass/devsendthread.cpp \
-    toolsclass/cdomxmlanalysis.cpp
+    toolsclass/http/chttpclient.cpp \
+    toolsclass/udpthread/devdiscoverythread.cpp \
+    toolsclass/xml/domxmlanalysisbase.cpp \
+    toolsclass/xml/domxmlanalysisforudp.cpp \
+    toolsclass/tabelview/mytableview.cpp \
+    toolsclass/tabelview/mytableviewdelegate.cpp \
+    deviceManger/devinfosys.cpp \
+    deviceManger/deviceMangerwindow.cpp \
+    toolsclass/cmd/httpcmd.cpp
 
-HEADERS  += clogindlg.h \
+HEADERS  += logindlg.h \
+    menu/menuwindow.h \
+    systemset/syssetwindow.h \
+    faceRecog/facerecogwindow.h \
     uilib/iconhelper.h \
-    menuwindow.h \
-    bkgroupwindow.h \
-    syssetwindow.h \
-    facerecogwindow.h \
-    toolsclass/readonlydelegatefortableview.h \
-    toolsclass/vipmodel.h \
-    toolsclass/canalysisxml.h \
-    toolsclass/chttpclient.h \
-    deviceMangerwindow.h \
-    toolsclass/devsendthread.h \
-    toolsclass/cdomxmlanalysis.h
+    toolsclass/http/chttpclient.h \
+    toolsclass/udpthread/devdiscoverythread.h \
+    toolsclass/xml/domxmlanalysisbase.h \
+    toolsclass/xml/domxmlanalysisforudp.h \
+    toolsclass/tabelview/mytableview.h \
+    toolsclass/tabelview/mytableviewdelegate.h \
+    deviceManger/devinfosys.h \
+    deviceManger/deviceMangerwindow.h \
+    toolsclass/cmd/httpcmd.h \
+    toolsclass/cmd/cmd.h
 
-FORMS    += clogindlg.ui \
-    menuwindow.ui \
-    bkgroupwindow.ui \
-    syssetwindow.ui \
-    facerecogwindow.ui \
-    deviceMangerwindow.ui
+FORMS    += logindlg.ui \
+    menu/menuwindow.ui \
+    systemset/syssetwindow.ui \
+    deviceManger/deviceMangerwindow.ui \
+    faceRecog/facerecogwindow.ui \
+    deviceManger/devinfosys.ui
 
 RC_ICONS = ./qrc/image/main.ico
 
 RESOURCES += \
-    aifacerecog.qrc
-
-DISTFILES +=
+    qrc.qrc

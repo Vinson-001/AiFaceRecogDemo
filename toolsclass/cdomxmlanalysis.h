@@ -10,9 +10,7 @@ public:
     CDomXmlAnalysis(QString strFileName,QString strTempFileName);
     void CreateDomXml();
     void CreateDomXml(QString strType);
-    void CreateDomXmlForUdp(QString strId,QString strName,\
-                      QString strSn, QString strPrivate, QString strIp,\
-                      QString strStataus = QObject::tr("离线"));
+    void CreateDomXmlForUdp();
 
     void AddXml(QString strType,const QString strId,QList<QString> strListText);
     void UpdateXml(QString strType,const QString strId,QList<QString> strListText);

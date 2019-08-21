@@ -10,7 +10,7 @@
 *
 {
     outline:0px;
-    color:#FEFEFE;
+    /*color:#FEFEFE;*/
 }
 /*
  *主窗体背景
@@ -26,9 +26,7 @@ QWidget#DeviceMangerWindow
 QLabel#labTitle
 {
     font:25px;
-
 }
-
 /*
  * 设置pushbutton 透明无边界
  */
@@ -38,6 +36,8 @@ QLabel#labTitle
     border:none;
     min-width:45px;
     max-width:45px;
+    color:#FEFEFE;
+
  }
   QPushButton#btnReTurnMenu:hover
   {
@@ -57,11 +57,13 @@ QLabel#labTitle
   }
   QToolButton#btnDevice
   {
+     color:#FEFEFE;
      background:none;
 
   }
   QToolButton#btnDevFind
   {
+     color:#FEFEFE;
      font:14px;
      background:none;
      min-width:100px;
@@ -75,6 +77,7 @@ QLabel#labTitle
 
   QToolButton#btnAdd
   {
+    color:#FEFEFE;
     font:14px;
     background:none;
     min-width:70px;
@@ -87,6 +90,7 @@ QLabel#labTitle
   }
   QToolButton#btnDelete
   {
+    color:#FEFEFE;
     font:14px;
     background:none;
     min-width:70px;
@@ -98,13 +102,27 @@ QLabel#labTitle
     color:#B0F4D6
   }
 
+QToolButton#btnClear
+{
+  color:#FEFEFE;
+  font:14px;
+  background:none;
+  min-width:70px;
+  min-height:30px;
+  qproperty-iconSize:30px 30px; /* 图标大小 */
+}
+QToolButton#btnSave:hover
+{
+  color:#B0F4D6
+}
+
 /*
 * 以下设置tabelview
 */
-QTableView {
 
-   min-height:270;
-   min-width:830;
+QTableView {
+    /*min-height:500;*/
+    /*min-width:830;*/
    color: rgb(0, 0, 0);
    font:14px;
    /*border: 1px solid #C07010;*/          /*边框颜色*/
@@ -117,7 +135,7 @@ QTableView {
 }
 
 QTableView::item:!alternate:!selected{
-    background-color: rgb(220, 220, 220);    /*交替行的另一颜色*/
+   background-color: rgb(220, 220, 220);    /*交替行的另一颜色*/
 
 }
 

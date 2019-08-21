@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qrc/font/fontawesome-webfont.ttf</file>
+        <file>qrc/image/bk2.jpg</file>
+        <file>qrc/image/main.ico</file>
+        <file>qrc/image/switchOff.png</file>
+        <file>qrc/image/switchOn.png</file>
+        <file>qrc/qss/menuwindow.qss</file>
+        <file>qrc/qss/syssetwindow.qss</file>
+        <file>qrc/image/switchOn1.png</file>
+        <file>qrc/image/switchOff1.png</file>
+        <file>qrc/qss/devicemangerwindow.qss</file>
+        <file>qrc/qss/facerecogwindow.qss</file>
+        <file>qrc/image/addRegister.png</file>
+        <file>qrc/image/editRegister.png</file>
+    </qresource>
+</RCC>

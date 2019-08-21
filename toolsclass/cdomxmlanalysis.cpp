@@ -3,6 +3,7 @@
 CDomXmlAnalysis::CDomXmlAnalysis()
 {
     m_strFileName = "";
+
 }
 /*
  * 互斥
@@ -86,7 +87,7 @@ void CDomXmlAnalysis::CreateDomXml(QString strType)
 {
     if(strType == DevInfoUdpType)
     {
-        CreateDomXmlForUdp("001","Dev1","Sn1","Private","0.0.0.0");
+        CreateDomXmlForUdp();
     }
 }
 //--------------------以下for udp ---------------------------//
@@ -103,8 +104,7 @@ void CDomXmlAnalysis::CreateDomXml(QString strType)
  *                  ...
  *              </Devices>
  */
-void CDomXmlAnalysis::CreateDomXmlForUdp(QString strId, QString strName, QString strSn, \
-                                   QString strPrivate, QString strIp, QString strStataus)
+void CDomXmlAnalysis::CreateDomXmlForUdp()
 {
     QDomDocument doc;
 
@@ -117,35 +117,6 @@ void CDomXmlAnalysis::CreateDomXmlForUdp(QString strId, QString strName, QString
     // 添加根元素
     QDomElement root = doc.createElement("Devices");
     doc.appendChild(root);
-
-    // 添加第一个图书元素及其子元素
-    QDomElement device = doc.createElement("Device");
-    QDomAttr id = doc.createAttribute("Id");
-    QDomElement name = doc.createElement("Name");
-    QDomElement sn = doc.createElement("Sn");
-    QDomElement prviate = doc.createElement("Prviate");
-    QDomElement ip = doc.createElement("IpAddr");
-    QDomElement status = doc.createElement("Status");
-    QDomText text;
-    id.setValue(strId);
-    device.setAttributeNode(id);
-    text = doc.createTextNode(strName);
-    name.appendChild(text);
-    text = doc.createTextNode(strSn);
-    sn.appendChild(text);
-    text = doc.createTextNode(strPrivate);
-    prviate.appendChild(text);
-    text = doc.createTextNode(strIp);
-    ip.appendChild(text);
-    text = doc.createTextNode(strStataus);
-    status.appendChild(text);
-
-    device.appendChild(name);
-    device.appendChild(sn);
-    device.appendChild(prviate);
-    device.appendChild(ip);
-    device.appendChild(status);
-    root.appendChild(device);
 
     QFile file(m_strFileName);
     if(!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) return ;
@@ -173,7 +144,11 @@ void CDomXmlAnalysis::UpdateXml(QString strType,const QString strId, QList<QStri
         doXmlForUdp("update",strId,strListText,"在线");
     }
 }
-
+/*
+ * 整个表修改
+ *              例如：recv (2,3,4) xml (1,2,3)
+ *                   4：新增 1：离线  2,3 在线
+ */
 void CDomXmlAnalysis::UpdateXml(QString strType, const QList<QString> strListId, QList<QList<QString> > strListListText)
 {
     /*1. 获取当前device 个数*/
@@ -182,7 +157,7 @@ void CDomXmlAnalysis::UpdateXml(QString strType, const QList<QString> strListId,
     getXmlCount(strType,xmlcount);
     if(strType == DevInfoUdpType)
     {
-        /*2. 提取相同的id，分离不同的id
+        /*2. 提取recv 和当前xml相同的id，分离不同的id
          *   相同则更新状态：在线
          *   isRecvId,则新增
          *   isXmlId,则更新离线状态
@@ -591,6 +566,7 @@ void CDomXmlAnalysis::AddElementToXmlForUdp(QString strId, QList<QString> strLis
 }
 /*
  * 根据Id 删除获取更新元素值，单一元素处理（增删改）
+ * strListText:(name,sn,private,strIp)
  *
  */
 void CDomXmlAnalysis::doXmlForUdp(const QString operate,\
