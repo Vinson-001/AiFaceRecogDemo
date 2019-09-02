@@ -35,6 +35,7 @@ private:
     void updateRegXml(QString strId,QList<QString> strListText);
     void addUnRegXml(QString strId,QList<QString> strListText);
     void setDevOutlineStatusList(QList<QString> strLitId);
+    void setAllDevOutlineStatusList();
     void setDevOnlineStatus(QString strId);
     QList<QString> getOutlineStringId(QList<QString> strListRecvId,QList<QString> strXmlListId);
     QList<QString> getOutlineStringIdInRegisterXml(QList<QString> strListRecvId);

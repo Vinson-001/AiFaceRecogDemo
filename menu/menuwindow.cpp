@@ -47,7 +47,7 @@ void MenuWindow::initNav()
     QList<QChar> listChar;
     listChar << 0xf0c0 << 0xf109 << 0xf002 << 0xf06e << 0xf0e8 << 0xf085;
     QList<QString> listText;
-    listText << "人员管理" << "设备监控" << "记录查询" << "人脸识别" << "设备管理" << "系统设置";
+    listText << "人脸采集" << "设备监控" << "记录查询" << "人脸管理" << "设备管理" << "系统设置";
 
     btns << ui->btnViewPeople << ui->btnViewDevice << ui->btnData << ui->btnFace << ui->btnDeviceManger << ui->btnConfig;
     for (int i = 0; i < btns.count(); i++) {
@@ -132,7 +132,9 @@ void MenuWindow::btnDataClicked()
 {
 
 }
-
+/*
+ * 跳转到人脸识别
+ */
 void MenuWindow::btnFaceClicked()
 {
     this->hide();

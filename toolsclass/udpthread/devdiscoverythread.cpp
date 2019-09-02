@@ -62,7 +62,7 @@ void DevDiscoveryThread::createTempXmlforRecvData(QString fileName)
 }
 /**
  * @funcname  readDomTempXml
- * @brief     读取xml临时文件
+ * @brief     读取xml临时文件,临时元素
  * @param     strListText output param
  * @return    no
  */
@@ -122,6 +122,14 @@ void DevDiscoveryThread::setDevOutlineStatusList(QList<QString> strLitId)
 {
     DomXmlAnalysisForRegister domXml(m_strfileRegPath);
     domXml.setDevOutlineStatus(strLitId);
+}
+
+void DevDiscoveryThread::setAllDevOutlineStatusList()
+{
+    DomXmlAnalysisForRegister domXml(m_strfileRegPath);
+    QList<QString> strIdList;
+    domXml.getDevIdList(strIdList);
+    domXml.setDevOutlineStatus(strIdList);
 }
 /**
  * @funcname  setDevOnlineStatus
@@ -214,6 +222,7 @@ void DevDiscoveryThread::udpRecvData()
     DomXmlAnalysisForUnRegister domXml(m_strfileUnRegPath);
     domXml.createDomXml("Devices");                 /*添加前重新创建文件，重写*/
     QList<QString> strSaveRecvId;                   /*保存接收的ID*/
+    bool isRecved = false;
     while (m_udpSocket->hasPendingDatagrams()) {
         QThread::msleep(1000);
 
@@ -233,7 +242,7 @@ void DevDiscoveryThread::udpRecvData()
                file.close();
 
                /*2. 解析xml */
-               /*2.1 解析临时xml */
+               /*2.1 解析临时xml 元素*/
                QList<QString> strListTemp;
                readDomTempXml(strListTemp);
                /*2.2 保存id：ip */
@@ -267,6 +276,7 @@ void DevDiscoveryThread::udpRecvData()
                     setDevOnlineStatus(strId);                      /*更新在线状态*/
                }
                //count++;
+               isRecved = true;
            }
        }
 
@@ -274,11 +284,17 @@ void DevDiscoveryThread::udpRecvData()
        //isUpdate = true;
        /*5.查询注册表，更新离线的设备状态*/
         QList<QString>isOutlineListId;
-        isOutlineListId = getOutlineStringIdInRegisterXml(strSaveRecvId);
-        qDebug() << "isOnlineListId" << isOutlineListId;
-        if(!isOutlineListId.isEmpty()){
-            setDevOutlineStatusList(isOutlineListId);
+        if(isRecved) {
+            isOutlineListId = getOutlineStringIdInRegisterXml(strSaveRecvId);   /*更新离线状态*/
+            qDebug() << "isOutlineListId" << isOutlineListId;
+            if(!isOutlineListId.isEmpty()){
+                setDevOutlineStatusList(isOutlineListId);
+            }
+        }else   /*全部离线*/
+        {
+                setAllDevOutlineStatusList();
         }
+
        /*6. 发射信号*/
        emit startUpdateDevInfo();
 

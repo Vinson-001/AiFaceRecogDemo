@@ -35,6 +35,34 @@
 #define INT_START_CMD_CODE              1101
 
 
+/*以下是设备管理*/
+
+/* 分组管理 */
+
+#define STR_CREATE_GROUP                "2001"
+#define STR_SERACH_GROUP                "2002"
+#define STR_DELETE_GROUP                "2003"
+
+#define INT_CREATE_GROUP                2001
+#define INT_SERACH_GROUP                2002
+#define INT_DELETE_GROUP                2003
+
+/* 数据库管理*/
+
+#define STR_DELETE_DATABASE                "2103"
+
+#define INT_DELETE_DATABASE                2103
+
+
+/* 区分返回信息 用于xml解析*/
+#define RETURN_GROUP_INFO "group_info"
+#define RETURN_HUAMN_INFO "human_info"
+
+#define RETURN_SUCESS "0"
+
+/* 人脸查询 */
+
+#define STR_FACE_QUERY      "2101"
 
 
 #endif // CMD_H

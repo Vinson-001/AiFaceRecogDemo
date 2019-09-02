@@ -10,7 +10,7 @@
 *
 {
     outline:0px;
-    color:#FEFEFE;
+    /*color:#FEFEFE;*/
 }
 /*
  *主窗体背景
@@ -28,15 +28,26 @@ QLabel#labTitle
     font:25px;
 
 }
+QLabel#info1label
+{
+    color: red;
+    background: #CCCCCC;
+}
+QLabel#info2label
+{
+    color: red;
+    background: #CCCCCC;
+}
+
 /*
  *顶部导航
  */
-QWidget[flag=\"nav\"]
+QWidget[flag="nav"]
 {
     background:qlineargradient(spread:pad,x1:0,y1:0,x2:0,y2:1,stop:0 #00688B,stop:1 #093746);
 }
 
-QWidget[flag=\"nav\"] QAbstractButton
+QWidget[flag="nav"] QAbstractButton
 {
     background:none;
     border:none;
@@ -52,26 +63,220 @@ QWidget[flag=\"nav\"] QAbstractButton
     background:none;
     border:none;
     min-width:45px;
-    max-width:45px;
+    max-width:75px;
+    color:#FEFEFE;
  }
+  QPushButton#importPicBtn:hover
+  {
+    color:#660099
+  }
+  QPushButton#deletePicBtn:hover
+  {
+    color:#660099
+  }
+  QPushButton#saveFeatureBtn:hover
+  {
+    color:#660099
+  }
+  QPushButton#faceQueryBtn:hover
+  {
+    color:#660099
+  }
   QPushButton#btnReTurnMenu:hover
   {
     color:#B0F4D6
   }
- /*
-  * 设置toolbutton 透明无边界
-  */
- QToolButton
-  {
-     font:18px;
-     border:none;
-     border-radius:2px;      /* 圆角边距 */
-     padding:2px;
-     qproperty-iconSize:50px 50px; /* 图标大小 */
-     font-weight:bold        /* 字体加粗 */
-  }
   QToolButton#btnPeople
   {
-     background:none
-
+    font:18px;
+    border:none;
+    border-radius:2px;      /* 圆角边距 */
+    padding:2px;
+    qproperty-iconSize:50px 50px; /* 图标大小 */
+    font-weight:bold;        /* 字体加粗 */
+    color:#FEFEFE;
+    background:none;
   }
+  QToolButton#audiotoolButton
+  {
+      border:none;
+      background:none;
+      min-width:20px;
+      min-height:20px;
+      qproperty-iconSize:20px 20px; /* 图标大小 */
+  }
+
+/*
+ * 设置group btn 样式
+ */
+QToolButton[btnType="createGroupBtn"]
+{
+    border:none;
+    border-radius:2px;      /* 圆角边距 */
+    background:none;
+    padding:2px;
+    color:#FEFEFE;
+    font:14px;
+    min-width:70px;
+    min-height:30px;
+    qproperty-iconSize:30px 30px; /* 图标大小 */
+}
+
+QToolButton[btnType="createGroupBtn"]:hover
+{
+  color:#660099
+}
+
+QToolButton[btnType="saveGroupBtn"]
+{
+    border:none;
+    border-radius:2px;      /* 圆角边距 */
+    background:none;
+    padding:2px;
+    color:#FEFEFE;
+    font:14px;
+    min-width:70px;
+    min-height:30px;
+    qproperty-iconSize:30px 30px; /* 图标大小 */
+}
+
+QToolButton[btnType="saveGroupBtn"]:hover
+{
+  color:#660099
+}
+
+QToolButton[btnType="deteleGroupBtn"]
+{
+    border:none;
+    border-radius:2px;      /* 圆角边距 */
+    background:none;
+    padding:2px;
+    color:#FEFEFE;
+    font:14px;
+    min-width:70px;
+    min-height:30px;
+    qproperty-iconSize:30px 30px; /* 图标大小 */
+}
+
+QToolButton[btnType="deteleGroupBtn"]:hover
+{
+  color:#660099
+}
+
+QToolButton[btnType="serachGroupBtn"]
+{
+    border:none;
+    border-radius:2px;      /* 圆角边距 */
+    background:none;
+    padding:2px;
+    color:#FEFEFE;
+    font:14px;
+    min-width:70px;
+    min-height:30px;
+    qproperty-iconSize:30px 30px; /* 图标大小 */
+}
+
+QToolButton[btnType="serachGroupBtn"]:hover
+{
+  color:#660099
+}
+
+QGroupBox[groupType="groupManger"] {
+    /* 背景渐变色*/
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                      stop: 0 #0066CC, stop: 1 #ABCDEF);
+
+    /* 边框 */
+    /*border: 2px solid red;*/
+
+    /* 倒角 */
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+/* 标题设置 */
+QGroupBox[groupType="groupManger"]::title {
+    /* 位置 */
+    subcontrol-origin: margin;
+    subcontrol-position: top center;
+
+    /* 内边框,上下和左右 */
+    padding: 10px 15px;
+
+    /* 颜色 */
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                      stop: 0 #0EC2FF, stop: 1 #FFFFFF);
+}
+/*以下是数据库管理*/
+QToolButton[btnType="deleteDataMangerBtn"]
+{
+    border:none;
+    border-radius:2px;      /* 圆角边距 */
+    background:none;
+    padding:2px;
+    color:#FEFEFE;
+    font:14px;
+    min-width:70px;
+    min-height:30px;
+    qproperty-iconSize:30px 30px; /* 图标大小 */
+}
+QToolButton[btnType="deleteDataMangerBtn"]:hover
+{
+  color:#660099
+}
+
+QGroupBox[groupType="DataManger"] {
+    /* 背景渐变色*/
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                      stop: 0 #0066CC, stop: 1 #ABCDEF);
+
+    /* 边框 */
+    /*border: 2px solid red;*/
+
+    /* 倒角 */
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+/* 标题设置 */
+QGroupBox[groupType="DataManger"]::title {
+    /* 位置 */
+    subcontrol-origin: margin;
+    subcontrol-position: top center;
+
+    /* 内边框,上下和左右 */
+    padding: 10px 15px;
+
+    /* 颜色 */
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                      stop: 0 #0EC2FF, stop: 1 #FFFFFF);
+}
+
+QGroupBox[groupType="faceManger"] {
+    /* 背景渐变色*/
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                      stop: 0 #0066CC, stop: 1 #CCCCCC);
+
+    /* 边框 */
+    /*border: 2px solid red;*/
+
+    /* 倒角 */
+    border-radius: 5px;
+    margin-top: 20px;
+    padding: 10px 15px;
+}
+
+/* 标题设置 */
+QGroupBox[groupType="faceManger"]::title {
+    /* 位置 */
+    subcontrol-origin: margin;
+    subcontrol-position: top center;
+
+    /* 内边框,上下和左右 */
+    padding: 10px 15px;
+
+    /* 颜色 */
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                      stop: 0 #0EC2FF, stop: 1 #FFFFFF);
+}
+

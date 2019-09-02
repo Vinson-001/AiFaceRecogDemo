@@ -196,7 +196,12 @@ int DomXmlAnalysisBase::setXmlElement(QString strRootElement,QList<QString> strL
 
 /**
  * @funcname  readDomXmlTemp
- * @brief     解析接收udp临时数据
+ * @brief     解析接收udp临时命令
+ *                                  <Function>
+ *                                      <Cmd></Cmd>
+ *                                      .....
+ *                                      <Status></Status>
+ *                                  </Function>
  * @param     strListText output
  * @return    no
  */

@@ -455,11 +455,13 @@ bool DevInfoSys::startHttpRequest(QUrl url)
         return false;
     }
     //QMutexLocker locker(&m_lockForXml);
+    /*保存值*/
     file.write(responseByte);
     file.close();
-    /*保存值*/
+
+    /*解析命令值*/
     DomXmlAnalysisForHttpTemp httpRemp(strFile);
-    httpRemp.readDomXmlTemp(m_strListRecv);
+    httpRemp.readDomXmlTempForReturnCmd(m_strListRecv);
 
     return true;
 }

@@ -28,7 +28,7 @@ public:
 private:
     Ui::DeviceMangerWindow *ui;
 
-    MyTableView *m_myTableView;
+    MyTableViewForDevice *m_myTableView;
     QThread *m_SendThread;
     DevDiscoveryThread *m_SendObjThread;
     QString m_strRegisterPath;
@@ -57,8 +57,8 @@ private:
     void deleteRegisterXml(QString strId);
     void removeAllRegisterXml();
     /*http 操作*/
-    void startHttpRequest(QUrl url);
-    void sendHttpCmd(QString strCmd);
+    //void startHttpRequest(QUrl url);
+    //void sendHttpCmd(QString strCmd);
 
 
 public:

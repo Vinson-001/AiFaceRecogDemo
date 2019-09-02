@@ -95,6 +95,7 @@ DomXmlAnalysisForRegister::DomXmlAnalysisForRegister(QString strfilename)
     if(!file.exists())
     {
         createDomXml("Devices");
+        qDebug() << "Devices";
     }
     initRegisterXml();
 }
@@ -134,6 +135,9 @@ void DomXmlAnalysisForRegister::initRegisterXml()
     strElementListText << "DeviceName" << "DeviceModel" << "DeviceSn" << "DeviceMac" << "Private" << "DeviceIpAddr" << "Status"\
                            << "FtpServerIpAddr" << "FtpServerCapPath" << "FtpServerRecoPath" << "HostRealTimeEventPort" << "HostAlarmEventPort";
     setXmlElement(strRootElement,strElementListText);
+    if(!m_strElementListText.isEmpty())
+        m_strElementListText.clear();
+    m_strElementListText = strElementListText;
 }
 /**
  * @funcname  getDevInfo
@@ -183,6 +187,24 @@ bool DomXmlAnalysisForRegister::getSysSetInfo(QString strId, QList<QString> &str
     strSysInfoList.append(strListText.at(11));      /*Warn Port*/
     return true;
 }
+/**
+ * @funcname  getElementTextFromDevId
+ * @brief     获取某一指定元素值
+ * @param     param1
+ * @param     param2
+ * @return    ret
+ */
+void DomXmlAnalysisForRegister::getElementTextFromDevId(QString strId, QString strElement, QString &strText)
+{
+    QList<QString> strListText;
+    readDomXml(strId,strListText);
+    int index = 0;
+    if(m_strElementListText.contains(strElement)) {
+        index = m_strElementListText.indexOf(strElement);
+        strText = strListText.at(index);
+    }
+
+}
 
 void DomXmlAnalysisForRegister::getDevIdList(QList<QString> &strIdList)
 {
@@ -211,6 +233,69 @@ void DomXmlAnalysisForRegister::getDevIdList(QList<QString> &strIdList)
         n = n.nextSibling();
     }
 }
+/**
+ * @funcname  getDevIpListFromIdList
+ * @brief     根据设备ID获取对应IP
+ * @param     strIdList 输入设备ID
+ * @param     strIpList 输出设备IP
+ * @return    no
+ */
+void DomXmlAnalysisForRegister::getDevIpListFromIdList(QList<QString> strIdList, QList<QString> &strIpList)
+{
+   int count = strIdList.count();
+   for (int i = 0; i < count; i++) {
+       QString strId = strIdList.at(i);
+       QString strText;
+       getElementTextFromDevId(strId,"DeviceIpAddr",strText);
+       strIpList.append(strText);
+   }
+
+}
+/**
+ * @funcname  getDevIdListFromOnline
+ * @brief     获取在线状态的设备ID
+ * @param     strIdList 输出参数
+ * @return    no
+ */
+void DomXmlAnalysisForRegister::getDevIdListFromOnline(QList<QString> &strIdList)
+{
+    QFile file(m_strFileName);
+    if (!file.open(QIODevice::ReadOnly)) return ;
+    QDomDocument doc;
+    if (!doc.setContent(&file))
+    {
+        file.close();
+        return ;
+    }
+    file.close();
+    QDomElement docElem = doc.documentElement();                /*root:Devices*/
+    QDomNode n = docElem.firstChild();                          /*Device node*/
+    while(!n.isNull())
+    {
+        if (n.isElement())
+        {
+            QDomElement e = n.toElement();
+            //ui->listWidget->addItem(e.tagName() + e.attribute("编号"));
+            QDomNodeList list = e.childNodes();                 /*Device element*/
+            QList<QString> strlistElement;
+            QString strId = e.attribute(Element_ID);
+
+            if (list.isEmpty()) {
+                return;
+            }
+            QDomNode node = list.at(6);                         /*list[6] 在线、离线*/
+            QString strStatus = node.toElement().text();
+            //qDebug() << strStatus;
+            if (strStatus == QObject::tr("在线"))
+            {
+                strIdList.append(strId);
+            }
+        }
+        n = n.nextSibling();
+    }
+    //qDebug() << mapElement;
+}
+
 /**
  * @funcname  setSysInfoToXml
  * @brief     设置系统信息到注册表
@@ -354,7 +439,81 @@ DomXmlAnalysisForHttpTemp::DomXmlAnalysisForHttpTemp(QString strfilename)
        // createDomXml();
     }
 }
+/**
+ * @funcname  readDomXmlTempForReturnCmd
+ * @brief     解析xml返回的命令状态
+ *                                  <Funtion>
+ *                                      <Cmd><Cmd>
+ *                                      <Status></Status>
+ *                                  </Funtion>
+ * @param     strList 输出结果
+ * @return    no
+ */
+void DomXmlAnalysisForHttpTemp::readDomXmlTempForReturnCmd(QList<QString> &strList)
+{
+    readDomXmlTemp(strList);
+}
+/**
+ * @funcname  readDomXmlTempForReturnValue
+ * @brief     解析xml返回的value
+ *                                  <Funtion>
+ *                                      <Group>
+ *                                          <ID></ID>
+ *                                          <Members></Members>
+ *                                      <Group>
+ *                                      <Group>
+ *                                          <ID></ID>
+ *                                          <Members></Members>
+ *                                      <Group>
+ *                                      ....
+ *                                  </Funtion>
+ * @param     strList 输出结果
+ * @return    no
+ */
+void DomXmlAnalysisForHttpTemp::readDomXmlTempForReturnValue(QMap<QString,QList<QString>> &mapElement)
+{
+    QFile file(m_strFileName);
+    if (!file.open(QIODevice::ReadOnly)) return ;
+    QDomDocument doc;
+    if (!doc.setContent(&file))
+    {
+        file.close();
+        return ;
+    }
+    file.close();
+    QDomElement docElem = doc.documentElement();                            /*Funtion*/
+    QDomNode n = docElem.firstChild();                                      /*Group1*/
+    int icount = 0;
+    if(!mapElement.isEmpty())
+        mapElement.clear();
+    while(!n.isNull())
+    {
+        if (n.isElement())
+        {
+            QDomElement e = n.toElement();                                  /*Group1 node*/
+            //ui->listWidget->addItem(e.tagName() + e.attribute("编号"));
+            QDomNodeList list = e.childNodes();
+            QList<QString> strlistElement;
+            //strlistElement.insert(0,e.attribute("Id"));
+            //QString strId = e.attribute("Id");
+            QString Index ;
+            Index = QString("Index%1").arg(icount);
+            for (int i=0; i<list.count(); i++)                              /*每个子标签元素*/
+            {
 
+                QDomNode node = list.at(i);
+                if(node.isElement()) {
+                    strlistElement.insert(i,node.toElement().text());
+                }
+            }
+            //qDebug() << strlist;
+            mapElement.insert(Index,strlistElement);
+            icount++;
+        }
+        n = n.nextSibling();                                                /* 跳转到下一节点 */
+    }
+    //qDebug() << mapElement;
+}
 /**
  * @funcname  createDomXml
  * @brief     创建普通文件即可,重载

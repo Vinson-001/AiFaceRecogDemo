@@ -1,51 +1,58 @@
-/**
-* @fileName      MyTableView.h
-* @brief         自定义tabelview表
-* @author        Wxyang
-* @date          2019-08-08
-*/
 #ifndef MYTABLEVIEW_H
 #define MYTABLEVIEW_H
-#include <QTableView>
-#include <QHeaderView>
-#include <QWidget>
-#include <QStandardItemModel>
-class MyTableView : public QTableView
+
+#include "./toolsclass/tabelview/mytableviewbase.h"
+
+/**
+* @fileName
+* @brief         以下是设备发现用的表格类
+* @author        Wxyang
+* @date          2019-08-22
+*/
+
+class MyTableViewForDevice : public MyTableViewBase
 {
     Q_OBJECT
 public:
-    explicit MyTableView(QWidget *parent = 0);
-    ~MyTableView();
-
-private:
-    /* 以下为表头 */
-
-    /* 以下为表格内容 */
-    QStandardItemModel *m_model;
-    QList<QString> m_strListHeadData;
+    explicit MyTableViewForDevice(QWidget *parent = 0);
+    ~MyTableViewForDevice();
 
 private:
     /* 以下为表格内容 */
+    //QStandardItemModel *m_model;
+    //QList<QString> m_strListHeadData;
+
+private:
     void initTableView();
-    void addRowTextForTable(int rowConut,QList<QString> strTextList);
-    void addRowForTable(QList<QString> strTextList);
-    void removeRowForTable();
-    void removeAllRowForTable();
-    void sortColForTable();
-    void SetTabViewColumnSpace();
-
-
 public:
+    void initMyTableView();
+
+};
+
+
+/**
+* @fileName
+* @brief         以下时人脸管理：分组管理的tableview
+* @author        Wxyang
+* @date          2019-08-22
+*/
+
+class MyTableViewForGroupManger : public MyTableViewBase
+{
+    Q_OBJECT
+public:
+    explicit MyTableViewForGroupManger(QWidget *parent = 0);
+    ~MyTableViewForGroupManger();
+
+private:
     /* 以下为表格内容 */
-    void doTable(QString operate, QList<QString> strTextList);
-    QString getValueFromRowAndCol(int row,int col);
-    QList<QString> getValueFromRow(int row);
-    void setTableColWidth(int width);
+    //QStandardItemModel *m_model;
+    //QList<QString> m_strListHeadData;
 
-public slots:
-    void slotRowDoubleClicked(const QModelIndex &index);
-
-signals:
+private:
+    void initTableView();
+public:
+    void initMyTableView();
 
 };
 

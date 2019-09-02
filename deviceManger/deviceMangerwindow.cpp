@@ -115,7 +115,13 @@ void DeviceMangerWindow::initNav()
  */
 void DeviceMangerWindow::initTableView()
 {
-    m_myTableView = new  MyTableView(this);
+    m_myTableView = new  MyTableViewForDevice(this);
+    QStandardItemModel *model = new QStandardItemModel(m_myTableView);
+    /*1. 设置model*/
+    m_myTableView->setTableModel(model);
+    /*2. 创建表格，并初始化 */
+    m_myTableView->initMyTableView();
+    /*3. 调整位置*/
     m_myTableView->resize(930,500);
     m_myTableView->setTableColWidth(930);
     m_myTableView->move(60,220);

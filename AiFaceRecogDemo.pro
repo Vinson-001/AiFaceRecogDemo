@@ -27,11 +27,13 @@ SOURCES += main.cpp\
     toolsclass/udpthread/devdiscoverythread.cpp \
     toolsclass/xml/domxmlanalysisbase.cpp \
     toolsclass/xml/domxmlanalysisforudp.cpp \
-    toolsclass/tabelview/mytableview.cpp \
     toolsclass/tabelview/mytableviewdelegate.cpp \
     deviceManger/devinfosys.cpp \
     deviceManger/deviceMangerwindow.cpp \
-    toolsclass/cmd/httpcmd.cpp
+    toolsclass/cmd/httpcmd.cpp \
+    toolsclass/tabelview/mytableviewbase.cpp \
+    toolsclass/tabelview/mytableview.cpp \
+    faceRecog/tcpclentobj.cpp
 
 HEADERS  += logindlg.h \
     menu/menuwindow.h \
@@ -42,12 +44,14 @@ HEADERS  += logindlg.h \
     toolsclass/udpthread/devdiscoverythread.h \
     toolsclass/xml/domxmlanalysisbase.h \
     toolsclass/xml/domxmlanalysisforudp.h \
-    toolsclass/tabelview/mytableview.h \
     toolsclass/tabelview/mytableviewdelegate.h \
     deviceManger/devinfosys.h \
     deviceManger/deviceMangerwindow.h \
     toolsclass/cmd/httpcmd.h \
-    toolsclass/cmd/cmd.h
+    toolsclass/cmd/cmd.h \
+    toolsclass/tabelview/mytableviewbase.h \
+    toolsclass/tabelview/mytableview.h \
+    faceRecog/tcpclentobj.h
 
 FORMS    += logindlg.ui \
     menu/menuwindow.ui \
