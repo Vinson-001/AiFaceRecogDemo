@@ -33,7 +33,11 @@ SOURCES += main.cpp\
     toolsclass/cmd/httpcmd.cpp \
     toolsclass/tabelview/mytableviewbase.cpp \
     toolsclass/tabelview/mytableview.cpp \
-    faceRecog/tcpclentobj.cpp
+    faceRecog/tcpclentobj.cpp \
+    RealEvent/realeventwindow.cpp \
+    RealEvent/mytcpserverforrealevent.cpp \
+    RealEvent/myserverthreadforrealevent.cpp \
+    RealEvent/myrealeventsocket.cpp
 
 HEADERS  += logindlg.h \
     menu/menuwindow.h \
@@ -51,14 +55,20 @@ HEADERS  += logindlg.h \
     toolsclass/cmd/cmd.h \
     toolsclass/tabelview/mytableviewbase.h \
     toolsclass/tabelview/mytableview.h \
-    faceRecog/tcpclentobj.h
+    faceRecog/tcpclentobj.h \
+    RealEvent/realeventwindow.h \
+    RealEvent/mytcpserverforrealevent.h \
+    RealEvent/myserverthreadforrealevent.h \
+    RealEvent/processorrealevent \
+    RealEvent/myrealeventsocket.h
 
 FORMS    += logindlg.ui \
     menu/menuwindow.ui \
     systemset/syssetwindow.ui \
     deviceManger/deviceMangerwindow.ui \
     faceRecog/facerecogwindow.ui \
-    deviceManger/devinfosys.ui
+    deviceManger/devinfosys.ui \
+    RealEvent/realeventwindow.ui
 
 RC_ICONS = ./qrc/image/main.ico
 

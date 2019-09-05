@@ -224,10 +224,6 @@ void TcpClentObj::readReplyDataFromServer()
             qint64 rlen = 0;
 
             char *feature_data = readFiles(m_files_ba,rlen);
-            //qDebug() << rlen;
-            //mallocBuffer(m_feature_data,rlen);
-            //memset(m_feature_data,0,rlen);
-            //memcpy(m_feature_data,pdata,rlen);
 
 
             //qDebug("recv: pdata:%p, pdata[0] = 0x%x",m_fr_reply_context.feature_data,m_fr_reply_context.feature_data[0]);

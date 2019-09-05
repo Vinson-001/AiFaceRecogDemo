@@ -33,11 +33,14 @@ void loginDlg::initUicontrol()
     connect(&m_menuWin,SIGNAL(showSysSetdlg()),&m_sysSetDlg,SLOT(getshowdlg()));            /*显示系统设置子窗口*/
     connect(&m_sysSetDlg,SIGNAL(showwnd()),&m_menuWin,SLOT(getshowwnd()));                  /*显示主窗口 */
 
-    connect(&m_menuWin,SIGNAL(showDeviceMangerdlg()),&m_deviceMangerDlg,SLOT(getshowdlg()));      /*显示人脸识别子窗口*/
+    connect(&m_menuWin,SIGNAL(showDeviceMangerdlg()),&m_deviceMangerDlg,SLOT(getshowdlg()));      /*显示设备管理子窗口*/
     connect(&m_deviceMangerDlg,SIGNAL(showwnd()),&m_menuWin,SLOT(getshowwnd()));               /* 显示主窗口 */
 
-    connect(&m_menuWin,SIGNAL(showFaceRecogdlg()),&m_faceRecogDlg,SLOT(getshowdlg()));      /*显示人脸识别子窗口*/
+    connect(&m_menuWin,SIGNAL(showFaceRecogdlg()),&m_faceRecogDlg,SLOT(getshowdlg()));      /*显示人脸管理子窗口*/
     connect(&m_faceRecogDlg,SIGNAL(showwnd()),&m_menuWin,SLOT(getshowwnd()));               /* 显示主窗口 */
+
+    connect(&m_menuWin,SIGNAL(showRealEventdlg()),&m_realEventDlg,SLOT(getshowdlg()));      /*显示人脸管理子窗口*/
+    connect(&m_realEventDlg,SIGNAL(showwnd()),&m_menuWin,SLOT(getshowwnd()));               /* 显示主窗口 */
 }
 
 void loginDlg::on_pushButton_clicked()
@@ -54,6 +57,7 @@ void loginDlg::on_btnLogin_clicked()
         m_sysSetDlg.hide();
         m_faceRecogDlg.hide();
         m_deviceMangerDlg.hide();
+        m_realEventDlg.hide();
         //qint32 ret = w.exec();
        // if(ret == MenuWindow::Accepted)
 //        {

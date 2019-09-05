@@ -6,6 +6,7 @@
 #include "./systemset/syssetwindow.h"
 #include "./faceRecog/facerecogwindow.h"
 #include "./deviceManger/deviceMangerwindow.h"
+#include "./RealEvent/realeventwindow.h"
 
 class SysSetWindow;
 class MenuWindow;
@@ -28,10 +29,13 @@ public:
 private:
     QString m_userName;
     QString m_passWord;
-    MenuWindow m_menuWin;
-    SysSetWindow m_sysSetDlg;
-    FaceRecogWindow m_faceRecogDlg;
-    DeviceMangerWindow m_deviceMangerDlg;
+
+    MenuWindow m_menuWin;                       /*主窗口*/
+    SysSetWindow m_sysSetDlg;                   /*系统设置*/
+    FaceRecogWindow m_faceRecogDlg;             /*人脸管理*/
+    DeviceMangerWindow m_deviceMangerDlg;       /*设备管理*/
+    RealEventWindow m_realEventDlg;
+
 private slots:
     void on_pushButton_clicked();
 

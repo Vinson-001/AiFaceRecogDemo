@@ -13,5 +13,6 @@
         <file>qrc/qss/facerecogwindow.qss</file>
         <file>qrc/image/addRegister.png</file>
         <file>qrc/image/editRegister.png</file>
+        <file>qrc/qss/realeventwindow.qss</file>
     </qresource>
 </RCC>

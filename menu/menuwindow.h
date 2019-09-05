@@ -40,6 +40,7 @@ private slots:
     void btnFaceClicked();
     void btnDeviceMangerClicked();
     void btnConfigClicked();
+    void btnRealEventClicked();
 
 
    void getshowwnd();
@@ -48,6 +49,7 @@ signals:
    void showSysSetdlg();        /*显示系统设置对话框*/
    void showFaceRecogdlg();     /* 显示人脸识别对话框 */
    void showDeviceMangerdlg();  /* 显示设备管理*/
+   void showRealEventdlg();     /* 显示实时事件对话框*/
 
 private:
     QPoint lastPos;

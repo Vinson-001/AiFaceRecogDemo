@@ -6,6 +6,9 @@
 #include <QDebug>
 static const QList<QString> g_mapKey= {"DeviceID","DeviceName","DeviceIP","FtpServerIP","FtpServerCapPath",\
                                    "FtpServerRecoPath","HostRealTimeEventPort","HostAlarmEventPort"};
+static const QList<QString> g_cmdCode = {DEV_ID_CMD_CODE, DEV_NAME_CMD_CODE, \
+                                         DEV_IP_CMD_CODE, FTP_IP_CMD_CODE, FTP_CAP_PATH_CMD_CODE, \
+                                         FTP_RECOG_PATH_CMD_CODE, RTC_EVENT_PORT_CMD_CODE, AlarmEvent_PORT_CMD_CODE};
 
 DevInfoSys::DevInfoSys(QWidget *parent) :
     QDialog(parent),
@@ -256,15 +259,15 @@ void DevInfoSys::setCmdisEdit(QString strIP,QList<QString> strListCmdPar)
      */
     bool ret = false;
     QMap<QString,QString> mapList;
-    int icmd = INT_START_CMD_CODE;
+    //int icmd = INT_START_CMD_CODE;
     int count = strListCmdPar.count();
     /*1. 循环发送命令*/
     for(int i = 0; i < count;i++){
         QString strCmd,strPar;
-        if(i==2){
-            icmd++;     /*跳过1103*/
-        }
-        strCmd = QString("%1").arg(icmd);
+
+        //strCmd = QString("%1").arg(icmd);
+        strCmd = g_cmdCode.at(i);
+
         strPar = strListCmdPar.at(i);
 
         /*非空的时候发送*/
@@ -272,6 +275,8 @@ void DevInfoSys::setCmdisEdit(QString strIP,QList<QString> strListCmdPar)
         {
             ret = sendOneCmd(strIP,strCmd,strPar);
             QString strkey;
+            int icmd;
+            icmd = strCmd.toInt();
             getCmdKeyFromCmdCode(icmd,strkey);      /*获取命令码的key*/
 
             if(ret)
@@ -285,7 +290,7 @@ void DevInfoSys::setCmdisEdit(QString strIP,QList<QString> strListCmdPar)
                 mapList.insert(strkey,strText);
             }
         }
-        icmd++;
+        //icmd++;
 
     }
 

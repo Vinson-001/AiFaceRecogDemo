@@ -59,7 +59,7 @@ QString HttpCmd::getRtcPortCmd(QString strIp,QString par)
 }
 QString HttpCmd::getWarnEventPortCmd(QString strIp,QString par)
 {
-    return CombineHttpCmd(strIp,WARN_PORT_CMD_CODE,par);
+    return CombineHttpCmd(strIp,AlarmEvent_PORT_CMD_CODE,par);
 }
 /**
  * @funcname  getCmdKeyFromCmdCode

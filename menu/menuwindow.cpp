@@ -47,7 +47,7 @@ void MenuWindow::initNav()
     QList<QChar> listChar;
     listChar << 0xf0c0 << 0xf109 << 0xf002 << 0xf06e << 0xf0e8 << 0xf085;
     QList<QString> listText;
-    listText << "人脸采集" << "设备监控" << "记录查询" << "人脸管理" << "设备管理" << "系统设置";
+    listText << "人脸采集" << "实时事件" << "记录查询" << "人脸管理" << "设备管理" << "系统设置";
 
     btns << ui->btnViewPeople << ui->btnViewDevice << ui->btnData << ui->btnFace << ui->btnDeviceManger << ui->btnConfig;
     for (int i = 0; i < btns.count(); i++) {
@@ -62,12 +62,12 @@ void MenuWindow::initNav()
 
         //connect(btn, SIGNAL(clicked(bool)), this, SLOT(buttonClicked()));
     }
-    connect(btns.at(0), SIGNAL(clicked(bool)), this, SLOT(btnViewPeopleClicked()));
-    connect(btns.at(1), SIGNAL(clicked(bool)), this, SLOT(btnViewDeviceClicked()));
+    connect(btns.at(0), SIGNAL(clicked(bool)), this, SLOT(btnViewPeopleClicked())); /*人脸采集*/
+    connect(btns.at(1), SIGNAL(clicked(bool)), this, SLOT(btnViewDeviceClicked())); /*实时事件*/
     connect(btns.at(2), SIGNAL(clicked(bool)), this, SLOT(btnDataClicked()));
-    connect(btns.at(3), SIGNAL(clicked(bool)), this, SLOT(btnFaceClicked()));
-    connect(btns.at(4), SIGNAL(clicked(bool)), this, SLOT(btnDeviceMangerClicked()));
-    connect(btns.at(5), SIGNAL(clicked(bool)), this, SLOT(btnConfigClicked()));
+    connect(btns.at(3), SIGNAL(clicked(bool)), this, SLOT(btnFaceClicked()));       /*人脸管理*/
+    connect(btns.at(4), SIGNAL(clicked(bool)), this, SLOT(btnDeviceMangerClicked()));/*设备管理*/
+    connect(btns.at(5), SIGNAL(clicked(bool)), this, SLOT(btnConfigClicked()));     /*功能配置*/
 #if 1
     QStringList qss;
     QFile qssFile(":/qrc/qss/menuwindow.qss");
@@ -122,10 +122,14 @@ void MenuWindow::btnViewPeopleClicked()
 {
 
 }
-
+/*
+ * 跳转到实时事件
+ */
 void MenuWindow::btnViewDeviceClicked()
 {
-
+    qDebug() << "Real Event" ;
+    this->hide();
+    emit showRealEventdlg();
 }
 
 void MenuWindow::btnDataClicked()
@@ -133,7 +137,7 @@ void MenuWindow::btnDataClicked()
 
 }
 /*
- * 跳转到人脸识别
+ * 跳转到人脸管理
  */
 void MenuWindow::btnFaceClicked()
 {
@@ -155,6 +159,12 @@ void MenuWindow::btnConfigClicked()
 {
     this->hide();
     emit showSysSetdlg();
+}
+
+void MenuWindow::btnRealEventClicked()
+{
+    this->hide();
+    emit showRealEventdlg();
 }
 /*
  * 显示子对话框

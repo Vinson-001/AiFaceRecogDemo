@@ -115,7 +115,7 @@ void FaceRecogWindow::mallocBuffer(char *buffer, quint32 size)
     }
 }
 /**
- * @funcname  funcinitBtnSytlename
+ * @funcname  initBtnSytlename
  * @brief     初始化button样式，同时连接信号与槽函数
  * @param     btns 需要设置的信号
  * @param     listChar 需要设置btn 的图标

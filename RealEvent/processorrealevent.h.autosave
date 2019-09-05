@@ -1,0 +1,60 @@
+#ifndef PROCESSOR_REAL_EVENT_H
+#define PROCESSOR_REAL_EVENT_H
+
+#include <QObject>
+#include <QAbstractSocket>
+#include <QTcpSocket>
+#include <QMutex>
+
+#define MAX_RTIME_EVENT_DATA_LEN      (300 * 1024)
+#define MIN_RTIME_EVENT_DATA_LEN      (128)
+
+/**
+ * event
+ **/
+typedef struct _rtime_event_info {
+        quint8 magic[4];
+        quint8 event_type;
+        quint8 direction;
+        quint8 reserved_0[2];
+        quint64 timestamp;
+        quint32 dev_id;
+        quint32 gid;
+        quint32 id;
+        quint8 name[32];
+        quint8 age;
+        quint8 reserved_1;
+        quint8 gender;
+        quint8 data_type;
+        quint32 data_len;
+        quint8 reserved_2[28];
+        quint8 extend[32];
+} rtime_event_info_t;
+
+
+class ProcessorRealEvent : public QTcpSocket
+{
+    Q_OBJECT
+public:
+    explicit ProcessorRealEvent(qintptr socketDescriptor, QObject *parent = nullptr);
+    ~ProcessorRealEvent();
+private:
+    rtime_event_info_t m_rtime_event_info;
+    bool m_isStop;
+    QMutex m_Mutex;
+    QTcpSocket *m_TcpSocket;
+
+public:
+
+    void enableThread(bool en=false);
+private:
+    void printfRtimeEventInfo();
+
+signals:
+    void isRealTimeRecvFinshed(char *);                                       /* 更新数据 */
+public slots:
+    void onRecvDataFromServer();                                       /* 从服务器开始接收 */
+
+};
+
+#endif // PROCESSOR_REAL_EVENT_H
