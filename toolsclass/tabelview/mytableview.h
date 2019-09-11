@@ -26,6 +26,7 @@ private:
     void initTableView();
 public:
     void initMyTableView();
+    QList<QString> getValueFromRow(int row);
 
 };
 
@@ -56,4 +57,58 @@ public:
 
 };
 
+
+/**
+* @fileName      MyTableViewForFaceQuery
+* @brief         以下是人脸管理：人脸查询的tableview
+* @author        Wxyang
+* @date          2019-09-05
+*/
+
+class MyTableViewForFaceQuery : public MyTableViewBase
+{
+    Q_OBJECT
+public:
+    explicit MyTableViewForFaceQuery(QWidget *parent = 0);
+    ~MyTableViewForFaceQuery();
+
+private:
+    /* 以下为表格内容 */
+    //QStandardItemModel *m_model;
+    //QList<QString> m_strListHeadData;
+
+private:
+    void initTableView();
+public:
+    void initMyTableView();
+
+};
+
+
+/**
+* @fileName
+* @brief         以下是人脸管理中，批量管理表格
+* @author        Wxyang
+* @date          2019-09-06
+*/
+
+class MyTableViewForImportMulPic : public MyTableViewBase
+{
+    Q_OBJECT
+public:
+    explicit MyTableViewForImportMulPic(QWidget *parent = 0);
+    ~MyTableViewForImportMulPic();
+
+private:
+    /* 以下为表格内容 */
+    //QStandardItemModel *m_model;
+    //QList<QString> m_strListHeadData;
+
+private:
+    void initTableView();
+public:
+    void initMyTableView();
+    void setTableColWidth(int width);
+
+};
 #endif // MYTABLEVIEW_H

@@ -95,3 +95,21 @@ QToolButton#startBtn:hover
 {
   color:#660099
 }
+
+QToolButton#stopBtn
+{
+  font:14px;
+  border:none;
+  border-radius:2px;      /* 圆角边距 */
+  min-width:100px;
+  min-height:30px;
+  padding:2px;
+  qproperty-iconSize:30px 30px; /* 图标大小 */
+  color:#FEFEFE;
+  background:none;
+}
+
+QToolButton#stopBtn:hover
+{
+  color:#660099
+}

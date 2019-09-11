@@ -195,7 +195,7 @@ QList<QString> MyTableViewBase::getValueFromRow(int row)
 {
     QList<QString> strList;
     int count = m_strListHeadData.count();
-    for(int i = 1; i < count-2; i++) {
+    for(int i = 1; i < count; i++) {
         QString str;
         str = getValueFromRowAndCol(row,i+1);   /*col从1开始*/
         strList.append(str);

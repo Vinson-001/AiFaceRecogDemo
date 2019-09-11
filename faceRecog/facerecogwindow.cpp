@@ -17,6 +17,7 @@ FaceRecogWindow::FaceRecogWindow(QWidget *parent):
     QDialog(parent),
     ui(new Ui::FaceRecogWindow),
     m_myTableForGroupManger(NULL),
+    m_myTableForFaceQuery(NULL),
     m_reply(NULL),
     m_strRegisterPath(""),
     m_strPicPath(""),
@@ -219,7 +220,6 @@ void FaceRecogWindow::initGroupMangerControl()
     connect(serachGroupBtn, SIGNAL(clicked(bool)), this, SLOT(onSerachGroupBtnClicked()));
     /*5.2 tableview 组ID改变信号与槽函数 */
     /*5.2 tableview 组ID改变信号与槽函数 */
-    connect(m_myTableForGroupManger, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(slotGroupMangerDoubleClicked(const QModelIndex &)));
 
     connect(m_myTableForGroupManger,SIGNAL(clicked(const QModelIndex &)),this,SLOT(myTableForGroupMangerClicked(const QModelIndex &)));
 }
@@ -286,8 +286,8 @@ void FaceRecogWindow::initFaceMangerControl()
     ui->gendercomboBox->addItem(tr("不选"),"no");
     //ui->gidcomboBox->addItem(tr("0"),"0");
 
-    ui->opscomboBox->addItem(tr("入库"),"0");
-    ui->opscomboBox->addItem(tr("抽feature"),"1");
+    ui->opscomboBox->addItem(tr(TEXT_INLibrary),STR_INLibrary);
+    ui->opscomboBox->addItem(tr(TEXT_OUTFeature),STR_OUTFeature);
     //IconHelper::Instance()->setIcon(ui->audiotoolButton, 0xf093, 20);
     QList<QToolButton*> btns;
     QList<QChar> listChar;
@@ -319,8 +319,12 @@ void FaceRecogWindow::initFaceMangerControl()
     connect(ui->audiotoolButton, SIGNAL(clicked(bool)), this, SLOT(onAudioBtnClicked()));
     /* 最后确认按钮 */
     connect(ui->sendpushButton,SIGNAL(clicked(bool)),this,SLOT(onOkBtnClicked()));
+    /* 提取特征值*/
     connect(ui->saveFeatureBtn,SIGNAL(clicked(bool)),this,SLOT(onSaveFilesBtnClicked()));
+    /* 人脸查询*/
     connect(ui->faceQueryBtn,SIGNAL(clicked(bool)),this,SLOT(onFaceQueryBtnClicked()));
+    /*批量导入*/
+    connect(ui->importMulPicBtn,SIGNAL(clicked(bool)),this,SLOT(onImportMulPicBtnClicked()));
 
     /*检查ops状态*/
     connect(ui->opscomboBox,SIGNAL(currentTextChanged(QString)),this,SLOT(onOpsComboxIndexChanged(QString)));
@@ -328,10 +332,29 @@ void FaceRecogWindow::initFaceMangerControl()
     connect(ui->gendercomboBox,SIGNAL(currentTextChanged(QString)),this,SLOT(onGenderComboxIndexChanged(QString)));
     /* 检查name*/
     connect(ui->namelineEdit,SIGNAL(textChanged(const QString &)),this, SLOT(onNameLineEditChanged(const QString &)));
+    /* 检查设备ID*/
+    connect(ui->devIdcomboBox,SIGNAL(currentTextChanged(QString )),this, SLOT(onDevIdComboxIndexChanged(QString)));
 
-    connect(m_tcp_face_request,SIGNAL(recvFinshed(int,char *)),this,SLOT(onRecvFinsed(int,char *)));
+    connect(m_tcp_face_request,SIGNAL(recvFinshed(int,const QList<QByteArray> &)),this,SLOT(onRecvFinsed(int,const QList<QByteArray> &)));
+
+
+
     ui->info1label->hide();
     ui->info2label->hide();
+
+
+    /*以下是人脸查询*/
+    //3.新增tableview控件
+    ui->indexlineEdit->setPlaceholderText(tr("从1开始"));
+    ui->numlineEdit->setPlaceholderText(tr("1~100"));
+    m_myTableForFaceQuery = new  MyTableViewForFaceQuery(this);
+    QStandardItemModel *faceQueryModel = new QStandardItemModel(m_myTableForFaceQuery);
+    /*3.1 设置model*/
+    m_myTableForFaceQuery->setTableModel(faceQueryModel);
+    /*3.2 创建表格，并初始化 */
+    m_myTableForFaceQuery->initMyTableView();
+    /*3.3 调整位置*/
+    m_myTableForFaceQuery->setGeometry(650,430,300,280);
 }
 /**
  * @funcname  startHttpRequest
@@ -630,7 +653,7 @@ void FaceRecogWindow::sendCmdForSerachGroup(QString strDevIP, QString par)
     {
         qDebug() << "fail";
     }
-    qDebug() << m_mapElement;
+    qDebug() << "sendCmdForSerachGroup:" << m_mapElement;
 }
 /**
  * @funcname  getOnlineDevIPAndDevID
@@ -663,11 +686,17 @@ void FaceRecogWindow::sendCmdForDeleteDataBase(QString strDevIP,QString par)
  * @funcname  addTabelViewRow
  * @brief     新增一行
  * @param     listText  每列的显示内容（不包含序号）
+ * @param     strType  表格类型
  * @return    no
  */
-void FaceRecogWindow::addTabelViewRow(QList<QString> listText)
+void FaceRecogWindow::addTabelViewRow(QList<QString> listText,QString strType)
 {
-    m_myTableForGroupManger->doTable("add",listText);
+    if(strType == GroupMangerTable) {
+        m_myTableForGroupManger->doTable("add",listText);
+    }
+    else{
+        m_myTableForFaceQuery->doTable("add",listText);
+    }
 
 }
 /**
@@ -675,30 +704,50 @@ void FaceRecogWindow::addTabelViewRow(QList<QString> listText)
  * @brief     删除选中的行
  * @return    无
  */
-void FaceRecogWindow::removeTableRow()
+void FaceRecogWindow::removeTableRow(QString strType)
 {
     QList<QString> listText;
-    m_myTableForGroupManger->doTable("remove",listText);
+    if(strType == GroupMangerTable) {
+        m_myTableForGroupManger->doTable("remove",listText);
+    }else{
+        m_myTableForFaceQuery->doTable("remove",listText);
+    }
 }
 
-void FaceRecogWindow::removeAllTable()
+void FaceRecogWindow::removeAllTable(QString strType)
 {
     QList<QString> listText;
-    m_myTableForGroupManger->doTable("removeAll",listText);
+    if(strType == GroupMangerTable) {
+        m_myTableForGroupManger->doTable("removeAll",listText);
+    }
+    else{
+        m_myTableForFaceQuery->doTable("removeAll",listText);
+    }
 }
 /**
  * @funcname  updateDisplayTable
  * @brief     更新列表显示
  * @return    no
  */
-void FaceRecogWindow::updateDisplayTable(QMap<QString,QList<QString>> map)
+void FaceRecogWindow::updateDisplayTable(QMap<QString,QList<QString>> map,QString strType)
 {
     QList<QString> listText;
     QMap<QString,QList<QString>>::const_iterator i;
 
     for (i = map.constBegin(); i != map.constEnd(); ++i) {
         listText = i.value();
-        addTabelViewRow(listText);
+        if(strType == GroupMangerTable) {
+            addTabelViewRow(listText,strType);
+        }
+        else{
+            if(listText.at(3) == "0"){
+                listText.replace(3,tr("男"));
+            }
+            else{
+                listText.replace(3,tr("女"));
+            }
+            addTabelViewRow(listText,strType);
+        }
     }
 }
 /**
@@ -884,24 +933,8 @@ void FaceRecogWindow::onSaveGroupBtnClicked()
     //QString strDevIp = "193.169.4.23";
     sendCmdForCreateGroup(strGroupId);
 
-
 }
-/**
- * @funcname  slotGroupMangerDoubleClicked
- * @brief     双击发送创建组ID
- * @return    wu
- */
-void FaceRecogWindow::slotGroupMangerDoubleClicked(const QModelIndex &index)
-{
 
-    /*if (index.isValid())
-    {
-        int row =  index.row();
-        QString strId;
-        strId = getDataFromRowAndCol(row+1,2);
-        //qDebug() << strId;
-    }*/
-}
 
 void FaceRecogWindow::myTableForGroupMangerClicked(const QModelIndex &index)
 {
@@ -1046,7 +1079,7 @@ void FaceRecogWindow::onFaceQueryBtnClicked()
  */
 void FaceRecogWindow::onSaveFilesBtnClicked()
 {
-
+#if 1
     QString path = QDir::currentPath();
     QString filename = QFileDialog::getSaveFileName(this, tr("Save As"), path, tr("Image Files (*.bmp);; All Files (*.*)"));
     if(!filename.isNull())
@@ -1056,16 +1089,31 @@ void FaceRecogWindow::onSaveFilesBtnClicked()
         if(!file.open(QIODevice::WriteOnly)) {
             return ;
         }
-        char *pdata = (char *)m_feature_data;
-        file.write(pdata,512);
-        qDebug("(%s:%s:%d) m_feature_data: = %p ,pdata[0] = 0x%x ", __FILE__, __FUNCTION__, __LINE__, m_feature_data, m_feature_data[0]);
+        QByteArray ba;
+        ba = m_files_baData.at(0);
+        file.write(ba);
+        //qDebug("(%s:%s:%d) m_feature_data: = %p ,pdata[0] = 0x%x ", __FILE__, __FUNCTION__, __LINE__, m_feature_data, m_feature_data[0]);
         file.flush();
         file.close();
     }
     else
     {
-        int ret = QMessageBox::information(NULL,tr("Save As"),tr("取消保存!"),QMessageBox::Yes,QMessageBox::No);
+        QMessageBox::information(NULL,tr("Save As"),tr("取消保存!"),QMessageBox::Yes,QMessageBox::No);
     }
+#endif
+}
+/**
+ * @funcname  onImportMulPicBtnClicked
+ * @brief     批量导入
+ * @param     no
+ * @param     no
+ * @return    no
+ */
+void FaceRecogWindow::onImportMulPicBtnClicked()
+{
+    m_strDevID = ui->devIdcomboBox->currentText();
+    ImportMulFaceInfoDlg dlg(this);
+    dlg.exec();
 }
 /**
  * @funcname  onOpsComboxlndexChanged
@@ -1076,7 +1124,7 @@ void FaceRecogWindow::onSaveFilesBtnClicked()
  */
 void FaceRecogWindow::onOpsComboxIndexChanged(QString text)
 {
-    if(text == tr(IN_Database))
+    if(text == tr(TEXT_INLibrary))
     {
         m_request_head.ops = 0;
         m_request_head.type = 0;
@@ -1084,7 +1132,7 @@ void FaceRecogWindow::onOpsComboxIndexChanged(QString text)
         m_item_head.feat_len_1 = 0;
         m_item_head.feat_len_2 = 0;
     }
-    else if(text == tr(OUT_Feature))
+    else if(text == tr(TEXT_OUTFeature))
     {
         m_request_head.ops = 1;
         m_request_head.type = 1;
@@ -1120,14 +1168,54 @@ void FaceRecogWindow::onNameLineEditChanged(const QString &text)
     m_strDevName = text;
     qDebug() << m_strDevName;
 }
+
+void FaceRecogWindow::onDevIdComboxIndexChanged(QString text)
+{
+    m_strDevID = text;
+}
 /**
  * @funcname  onRecvFinsed
  * @brief     更新接收信息
  * @param     itype
  * @return    no
  */
-void FaceRecogWindow::onRecvFinsed(int itype,char *data)
+void FaceRecogWindow::onRecvFinsed(int itype,const QList<QByteArray> &baData)
 {
+    if(itype == INT_INLibrary){
+        memset(&m_reply_head,0,sizeof(reply_head_t));
+        m_reply_item_head_list.clear();
+        m_reply_head = m_tcp_face_request->m_reply_head;
+        m_reply_item_head_list = m_tcp_face_request->m_reply_item_head_list;
+        QString strTemp,strMagic;
+        for(int i = 0; i < m_reply_head.obj_num; i++){
+            memset(&m_reply_item_head,0,sizeof(reply_item_head_t));
+            m_reply_item_head = m_reply_item_head_list.at(i);
+            strTemp += "\nrecv data finished...\n";
+            strTemp += QString("recv obj%1...\n").arg(i+1);
+            strMagic = QString(QLatin1String((char *)m_reply_item_head.magic));
+            strTemp += QString("magic : %1\n").arg(strMagic);
+            strTemp += QString("name : %1\n").arg(m_strDevName);
+            strTemp += QString("gid : %1\n").arg(m_reply_item_head.gid);
+            strTemp += QString("id : %1\n").arg(m_reply_item_head.id);
+            strTemp += QString("err : %1\n").arg(m_reply_item_head.err);
+            strTemp += QString("errno_0 : %1\n").arg(m_reply_item_head.errno_0);
+            strTemp += QString("errno_1 : %1\n").arg(m_reply_item_head.errno_1);
+            strTemp += QString("errno_2 : %1\n").arg(m_reply_item_head.errno_2);
+            strTemp += QString("data_num : %1\n").arg(m_reply_item_head.data_num);
+            strTemp += QString("data_len_0 : %1\n").arg(m_reply_item_head.data_len_0);
+            strTemp += QString("data_len_1 : %1\n").arg(m_reply_item_head.data_len_1);
+            strTemp += QString("data_len_2 : %1\n").arg(m_reply_item_head.data_len_2);
+            strTemp += QString("recv obj%1...ok\n").arg(i+1);
+        }
+        QString str = ui->infotextEdit->toPlainText();
+        str += strTemp;
+        ui->infotextEdit->setPlainText(str);
+
+        /*保存特征值*/
+        m_files_baData.clear();
+        m_files_baData = baData;
+    }
+#if 0
     if(itype == INT_INLibrary){
         memset(&m_fr_reply_context,0,sizeof(face_reply_server_context_t));
 
@@ -1161,11 +1249,14 @@ void FaceRecogWindow::onRecvFinsed(int itype,char *data)
         qDebug("(%s:%s:%d) m_feature_data: = %p ,pdata[0] = 0x%x", __FILE__, __FUNCTION__, __LINE__, m_feature_data, m_feature_data[0]);
 
     }
+#endif
 }
 
 void FaceRecogWindow::onSendData()
 {
-    checkSetSataus();
+    bool status = checkSetSataus();
+    if(status == false)
+        return;
     ui->infotextEdit->clear();
     /*1. 准备数据*/
     QString info;
@@ -1197,8 +1288,8 @@ void FaceRecogWindow::onSendData()
     strTemp += QString("audio_len : %1\n").arg(m_item_head.audio_len);
     info +=strTemp;
 #endif
-    //printfDataHead();
-    //printfItemHead();
+    printfDataHead();
+    printfItemHead();
 
 
 
@@ -1230,7 +1321,7 @@ void FaceRecogWindow::updateDataHead()
    // m_request_head.ops                              /*ops type已赋值*/
     m_request_head.obj_num = 1;                       /*默认1*/
 
-    m_fr_context.request_head = &m_request_head;
+    //m_fr_context.request_head = &m_request_head;
 
 }
 
@@ -1281,7 +1372,7 @@ void FaceRecogWindow::updateItemHead()
         m_item_head.feat_len_2 = 0;
     }
     /*音频文件是导入时赋值的*/
-    m_fr_context.request_item_head = &m_item_head;
+    //m_fr_context.request_item_head = &m_item_head;
 }
 char *FaceRecogWindow::prepareFiles(QString strFilePath)
 {
@@ -1295,6 +1386,26 @@ char *FaceRecogWindow::prepareFiles(QString strFilePath)
     ba = file.readAll();
     file.close();
     return ba.data();
+}
+
+quint64 FaceRecogWindow::prepareFiles(QString strFilePath, QByteArray &baData)
+{
+    QFile file(strFilePath);
+    QFileInfo fileInfo(file);
+    quint64 size = fileInfo.size();
+    if(!file.exists())
+        return -1;
+    if(!file.open(QIODevice::ReadOnly)) {
+        return -1;
+    }
+    quint64 rtotal = 0;
+    while(rtotal != size)  {
+        QByteArray ba;
+        ba = (file.read(size - rtotal));
+        rtotal += ba.size();
+        baData.append(ba);
+    }
+    return size;
 }
 
 qint64 FaceRecogWindow::sendDataToServer()
@@ -1317,14 +1428,23 @@ qint64 FaceRecogWindow::sendDataToServer()
 
         qDebug("(%s:%s:%d) send image...", __FILE__, __FUNCTION__, __LINE__);
         int data_len = m_item_head.data_len_0;
-        rsize = m_tcp_face_request->sendData(prepareFiles(m_strPicPath),data_len);
+        rsize = 0;
+        QByteArray ba;
+        if(m_request_head.type == INT_PIC_TYPE)
+            prepareFiles(m_strPicPath,ba);
+        else{   /*特征值*/
 
+        }
+        rsize = m_tcp_face_request->sendData(ba,data_len);
+        qDebug() << "rsize" << rsize;
         total += rsize;
         if(m_item_head.audio_support)
         {
             qDebug("(%s:%s:%d) send audio...", __FILE__, __FUNCTION__, __LINE__);
             rsize = 0;
-            rsize = m_tcp_face_request->sendData(prepareFiles(m_strAudioPath),m_item_head.audio_len);
+            ba.clear();
+            prepareFiles(m_strAudioPath,ba);
+            rsize = m_tcp_face_request->sendData(ba,m_item_head.audio_len);
             total += rsize;
         }
 
@@ -1339,34 +1459,42 @@ qint64 FaceRecogWindow::sendDataToServer()
  * @brief     点击确定前检查状态
  * @param     无
  * @param     无
- * @return    no
+ * @return    true
  */
-void FaceRecogWindow::checkSetSataus()
+bool FaceRecogWindow::checkSetSataus()
 {
-    /*1. 检查有没有导入图片 */
-    if(ui->piclenlineEdit->text().isEmpty())
-    {
-        ui->info1label->setText(tr("请导入图片!"));
-        ui->info1label->show();
-        ui->sendpushButton->setDisabled(true);
-    }
-    else
-    {
-        ui->info1label->hide();
-        ui->sendpushButton->setEnabled(true);
-    }
 
-    /*2. 检查有没有影音文件*/
-    if(m_item_head.audio_support && ui->audiolineEdit->text().isEmpty())
-    {
-        ui->info2label->setText(tr("请导入音频!"));
-        ui->info2label->show();
-        ui->sendpushButton->setDisabled(true);
+    if(m_item_head.audio_support){ /*检查是否支持音频文件*/
+        if(ui->audiotoolButton->text().isEmpty()){
+            ui->info2label->setText(tr("请导入音频!"));
+            ui->info2label->show();
+            return false;
+        }
+        else{   /*支持音频*/
+            ui->info2label->hide();
+            if(ui->piclenlineEdit->text().isEmpty()){
+                ui->info1label->setText(tr("请导入图片!"));
+                ui->info1label->show();
+                //ui->sendpushButton->setDisabled(true);
+                return false;
+            }
+            else{
+                ui->info1label->hide();
+                return true;
+            }
+        }
     }
-    else
-    {
-        ui->info2label->hide();
-        ui->sendpushButton->setEnabled(true);
+    else {  /*不支持音频*/
+        if(ui->piclenlineEdit->text().isEmpty()){
+            ui->info1label->setText(tr("请导入图片!"));
+            ui->info1label->show();
+            //ui->sendpushButton->setDisabled(true);
+            return false;
+        }
+        else{
+            ui->info1label->hide();
+            return true;
+        }
     }
 }
 
@@ -1432,14 +1560,23 @@ void FaceRecogWindow::sendCmdForFaceQuery()
     getDevIPFromID(str,strIp);
     /*2. 获取查询分组ID */
     QString gid = ui->gidlineEdit->text();
-    QString index = "0";
-    QString number = "1";
+    QString index = ui->indexlineEdit->text();
+    QString number = ui->numlineEdit->text();
+    if(index.toInt() <= 0 || number.toInt() > 100 || number.toInt() <=0){
+        QMessageBox::information(NULL,tr("人脸查询"),tr("请输入正确的index(>0) or number(1~100)"),QMessageBox::Ok);
+        return;
+    }
     /*3. 组合命令*/
     QString strPar;
     strPar = QString("%1,%2,%3").arg(gid).arg(index).arg(number);
-    qDebug()<< strPar;
+    //qDebug()<< strPar;
     sendOneCmd(strIp,STR_FACE_QUERY,strPar);
 
+
+    qDebug() << "sendCmdForFaceQuery:" << m_mapElement;
+    /*刷新显示*/
+    removeAllTable(FaceQueryTable);
+    updateDisplayTable(m_mapElement,FaceQueryTable);
 }
 
 

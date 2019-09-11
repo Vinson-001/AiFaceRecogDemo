@@ -60,9 +60,13 @@ private:
 signals:
     void isRealTimeRecvFinshed(char *);                                       /* 更新数据 */
     void RealTimeDataReady(const QString &, const rtime_event_head_t&, const QByteArray &);
+    void error(QAbstractSocket::SocketError);
 
 public slots:
     void onRecvDataFromServer();                                       /* 从服务器开始接收 */
+    void disconnectToHost();
+    void SocketErr(QAbstractSocket::SocketError);
+
 
 };
 

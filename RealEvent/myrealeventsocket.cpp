@@ -8,11 +8,16 @@ MyRealEventSocket::MyRealEventSocket(qintptr socketDescriptor, QObject *parent)
       m_image_size(0)
 
 {
-    connect(this, SIGNAL(readyRead()), this, SLOT(onRecvDataFromServer()));
+    //connect(this, SIGNAL(readyRead()), this, SLOT(onRecvDataFromServer()));
+    //connect(this, &MyRealEventSocket::disconnected, this, &MyRealEventSocket::disconnectToHost);
+    this->setSocketDescriptor(socketDescriptor);
+    connect(this, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(SocketErr(QAbstractSocket::SocketError)));
 }
 
 MyRealEventSocket::~MyRealEventSocket()
 {
+    //disconnectToHost();
+    qDebug() << "~MyRealEventSocket";
 
 }
 
@@ -79,17 +84,19 @@ void MyRealEventSocket::onRecvDataFromServer()
         }
     }
     else{               /*读取实际图像数据*/
-
+#ifdef DEBUG
         qDebug() << "recv data :" << jcount << "m_image_size: "<< m_image_size;
-        //m_tcpRecvBlock.append(this->readAll());
+#endif
         static int rtotal = 0;
         QByteArray ba;
         ba = (this->read(m_image_size - rtotal));
         rtotal += ba.size();
         m_tcpRecvBlock.append(ba);
         /*读取完成*/
+#ifdef DEBUG
         qDebug("(%s:%s:%d) recv tmp data count = %d ,rtotal size = %d", __FILE__, __FUNCTION__,\
                __LINE__, jcount, rtotal);
+#endif
         if(rtotal == m_image_size){
             //qDebug() << "recv data :" << jcount << "rtotal: "<< rtotal;
             qDebug("(%s:%s:%d) recv data count = %d ,rtotal size = %d", __FILE__, __FUNCTION__,\
@@ -97,6 +104,8 @@ void MyRealEventSocket::onRecvDataFromServer()
             /*获取图片数据*/
             /*获取IP地址*/
             QString ip = peerAddress().toString();
+
+            ip += QString("|%1").arg(m_socketDescriptor);
             emit RealTimeDataReady(ip, m_rtime_event_head, m_tcpRecvBlock);
 #ifdef DEBUG
             char *pdata = (m_tcpRecvBlock.data()); // 获取图片数据
@@ -131,16 +140,23 @@ void MyRealEventSocket::onRecvDataFromServer()
 
     }
 
+}
 
+void MyRealEventSocket::disconnectToHost()
+{
+    qDebug("(%s:%s:%d) disconnect client : m_socketDescriptor = %d ,rtotal size = %d", __FILE__, __FUNCTION__,\
+           __LINE__, m_socketDescriptor);
+}
 
-
-
-
-
-
-
+void MyRealEventSocket::SocketErr(QAbstractSocket::SocketError)
+{
+    MyRealEventSocket *socket = (MyRealEventSocket*)sender();
+    qDebug("socket[%d] ip[%s] port[%d] err[%s]", socket->socketDescriptor(),
+            socket->peerAddress().toString().toLocal8Bit().data(),socket->peerPort(),socket->errorString().toLocal8Bit().data());
 
 }
+
+
 
 /**
  * @funcname  enableThread

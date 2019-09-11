@@ -48,7 +48,7 @@
      <x>390</x>
      <y>100</y>
      <width>580</width>
-     <height>511</height>
+     <height>631</height>
     </rect>
    </property>
    <property name="title">
@@ -59,8 +59,8 @@
      <rect>
       <x>440</x>
       <y>180</y>
-      <width>45</width>
-      <height>45</height>
+      <width>40</width>
+      <height>30</height>
      </rect>
     </property>
     <property name="text">
@@ -70,10 +70,10 @@
    <widget class="QPushButton" name="deletePicBtn">
     <property name="geometry">
      <rect>
-      <x>500</x>
+      <x>480</x>
       <y>180</y>
-      <width>45</width>
-      <height>45</height>
+      <width>40</width>
+      <height>30</height>
      </rect>
     </property>
     <property name="text">
@@ -84,9 +84,9 @@
     <property name="geometry">
      <rect>
       <x>440</x>
-      <y>230</y>
-      <width>45</width>
-      <height>45</height>
+      <y>210</y>
+      <width>40</width>
+      <height>30</height>
      </rect>
     </property>
     <property name="text">
@@ -98,8 +98,8 @@
      <rect>
       <x>20</x>
       <y>330</y>
-      <width>200</width>
-      <height>151</height>
+      <width>220</width>
+      <height>280</height>
      </rect>
     </property>
    </widget>
@@ -107,9 +107,9 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>310</y>
+      <y>305</y>
       <width>54</width>
-      <height>12</height>
+      <height>20</height>
      </rect>
     </property>
     <property name="text">
@@ -132,14 +132,73 @@
    <widget class="QPushButton" name="faceQueryBtn">
     <property name="geometry">
      <rect>
-      <x>500</x>
-      <y>230</y>
-      <width>45</width>
-      <height>45</height>
+      <x>480</x>
+      <y>210</y>
+      <width>40</width>
+      <height>30</height>
      </rect>
     </property>
     <property name="text">
      <string>查询</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="indexlabel">
+    <property name="geometry">
+     <rect>
+      <x>240</x>
+      <y>305</y>
+      <width>30</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>索引</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="indexlineEdit">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>305</y>
+      <width>60</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="numberlabel">
+    <property name="geometry">
+     <rect>
+      <x>340</x>
+      <y>305</y>
+      <width>54</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Numbers</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="numlineEdit">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>305</y>
+      <width>60</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="importMulPicBtn">
+    <property name="geometry">
+     <rect>
+      <x>440</x>
+      <y>250</y>
+      <width>60</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>批量导入</string>
     </property>
    </widget>
   </widget>

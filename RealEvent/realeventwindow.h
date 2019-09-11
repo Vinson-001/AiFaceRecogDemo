@@ -29,6 +29,7 @@ private:
     rtime_event_head_t m_rtime_event_head;
 
 
+
 private:
     void initForm();
     void initNav();
@@ -53,6 +54,7 @@ signals:
     void showwnd();                 /* 发射显示主窗口信号*/
 
     void startRecvDataFromServer(); /* 开始接收realtime 数据*/
+    void stopRtimeEventThread();
 private slots:
     void on_btnReTurnMenu_clicked();
     void getshowdlg();
@@ -60,6 +62,7 @@ private slots:
     void onIsRealTimeRecvFinshed(const QString&, const rtime_event_head_t&, const QByteArray&);/* 接收完成*/
 
     void btnStartClicked(); /*开启线程*/
+    void btnStopClicked();  /*stop*/
 
 
 

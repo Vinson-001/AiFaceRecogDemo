@@ -43,6 +43,7 @@ public:
     void getDevIdList(QList<QString> &strIdList);
     void getDevIpListFromIdList(QList<QString> strIdList,QList<QString> &strIpList);
     void getDevIdListFromOnline(QList<QString> &strIdList);
+    void getDevIpFromId(QString strId,QString &strIp);
 
     void setSysInfoToXml(QString strId,QList<QString> strList);
     void setDevOutlineStatus(QList<QString> strListId);

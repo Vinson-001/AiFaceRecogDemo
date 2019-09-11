@@ -295,6 +295,17 @@ void DomXmlAnalysisForRegister::getDevIdListFromOnline(QList<QString> &strIdList
     }
     //qDebug() << mapElement;
 }
+/**
+ * @funcname  getDevIpFromId
+ * @brief     根据设备ID获取IP
+ * @param     strId 设备ID
+ * @param     strIp 设备IP
+ * @return    ret
+ */
+void DomXmlAnalysisForRegister::getDevIpFromId(QString strId, QString &strIp)
+{
+    getElementTextFromDevId(strId,"DeviceIpAddr",strIp);
+}
 
 /**
  * @funcname  setSysInfoToXml
@@ -497,6 +508,7 @@ void DomXmlAnalysisForHttpTemp::readDomXmlTempForReturnValue(QMap<QString,QList<
             //strlistElement.insert(0,e.attribute("Id"));
             //QString strId = e.attribute("Id");
             QString Index ;
+            icount++;
             Index = QString("Index%1").arg(icount);
             for (int i=0; i<list.count(); i++)                              /*每个子标签元素*/
             {
@@ -508,7 +520,7 @@ void DomXmlAnalysisForHttpTemp::readDomXmlTempForReturnValue(QMap<QString,QList<
             }
             //qDebug() << strlist;
             mapElement.insert(Index,strlistElement);
-            icount++;
+
         }
         n = n.nextSibling();                                                /* 跳转到下一节点 */
     }

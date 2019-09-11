@@ -58,29 +58,87 @@ QWidget[flag="nav"] QAbstractButton
 /*
  * 设置pushbutton 透明无边界
  */
- QPushButton
+
+ QPushButton#importPicBtn
  {
-    background:none;
-    border:none;
-    min-width:45px;
-    max-width:75px;
-    color:#FEFEFE;
+     background:none;
+     border:none;
+     min-width:40px;
+     max-width:75px;
+     color:#FEFEFE;
  }
+
   QPushButton#importPicBtn:hover
   {
     color:#660099
+  }
+  QPushButton#deletePicBtn
+  {
+      background:none;
+      border:none;
+      min-width:40px;
+      max-width:75px;
+      color:#FEFEFE;
   }
   QPushButton#deletePicBtn:hover
   {
     color:#660099
   }
+  QPushButton#sendpushButton
+  {
+      background:none;
+      border:none;
+      min-width:40px;
+      max-width:75px;
+      color:#FEFEFE;
+  }
+  QPushButton#sendpushButton:hover
+  {
+    color:#660099
+  }
+  QPushButton#saveFeatureBtn
+  {
+      background:none;
+      border:none;
+      min-width:40px;
+      max-width:75px;
+      color:#FEFEFE;
+  }
   QPushButton#saveFeatureBtn:hover
   {
     color:#660099
   }
+  QPushButton#faceQueryBtn
+  {
+      background:none;
+      border:none;
+      min-width:40px;
+      max-width:75px;
+      color:#FEFEFE;
+  }
   QPushButton#faceQueryBtn:hover
   {
     color:#660099
+  }
+  QPushButton#importMulPicBtn
+  {
+      background:none;
+      border:none;
+      min-width:40px;
+      max-width:75px;
+      color:#FEFEFE;
+  }
+  QPushButton#importMulPicBtn:hover
+  {
+    color:#660099
+  }
+  QPushButton#btnReTurnMenu
+  {
+      background:none;
+      border:none;
+      min-width:40px;
+      max-width:75px;
+      color:#FEFEFE;
   }
   QPushButton#btnReTurnMenu:hover
   {

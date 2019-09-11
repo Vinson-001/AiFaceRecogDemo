@@ -24,6 +24,11 @@ RealEventWindow::RealEventWindow(QWidget *parent):
 
 RealEventWindow::~RealEventWindow()
 {
+    stopRtimeEventThread();
+    if(m_TcpServerRealEvent)
+    {
+        delete m_TcpServerRealEvent;
+    }
     delete ui;
 }
 
@@ -113,14 +118,15 @@ void RealEventWindow::initRealEventGroupControl()
     QList<QChar> listChar;          /* icon */
     QList<QString> listText;        /* name*/
 
-    btns << ui->startBtn ;
-    listChar << 0xf144;
-    listText << tr("开始");
+    btns << ui->startBtn << ui->stopBtn ;
+    listChar << 0xf144 << 0xf28d;
+    listText << tr("开始") <<tr("停止");
     initBtnSytle(btns,listChar,listText);       /*初始化btn样式*/
 
 
     /*绑定信号与槽函数*/
     connect(ui->startBtn, SIGNAL(clicked(bool)), this, SLOT(btnStartClicked()));
+    connect(ui->stopBtn, SIGNAL(clicked(bool)), this, SLOT(btnStopClicked()));
 }
 /**
  * @funcname  startTcpRealEventThread
@@ -159,16 +165,22 @@ void RealEventWindow::startTcpRealEventThread()
 
 void RealEventWindow::stopTcpRealEventThread()
 {
+    qDebug("(%s:%s:%d) stop real event thread ", __FILE__, __FUNCTION__, __LINE__);
+    emit stopRtimeEventThread();
+    qDebug("(%s:%s:%d) end stop real event thread ", __FILE__, __FUNCTION__, __LINE__);
+    delete m_TcpServerRealEvent;
+    m_TcpServerRealEvent = NULL;
 #if 0
     qDebug("(%s:%s:%d) stop real event thread ", __FILE__, __FUNCTION__, __LINE__);
-    if(m_RealEventQThread)
+    /*if(m_RealEventQThread)
     {
         if(m_RealEventQObjThread){
             m_RealEventQObjThread->enableThread(false);
         }
         m_RealEventQThread->quit();
     }
-    m_RealEventQThread->wait();
+    m_RealEventQThread->wait();*/
+    emit stopRtimeEventThread();    //停止
     qDebug("(%s:%s:%d) end stop real event thread ", __FILE__, __FUNCTION__, __LINE__);
 #endif
 
@@ -205,8 +217,11 @@ void RealEventWindow::showRecogPic(QString strPic)
 {
    // QPixmap picture = QPixmap(strPic);
    // ui->picLab->setPixmap(picture);
-     QPixmap icon(strPic);
-     ui->picLabel->setPixmap(icon);
+     QImage image;
+     if( image.load(strPic) )
+     {
+         ui->picLabel->setPixmap(QPixmap::fromImage(image));
+     }
      //ui->picLabel->resize(icon.width(),icon.height());
 }
 /**
@@ -362,30 +377,41 @@ void RealEventWindow::onIsRealTimeRecvFinshed(const QString& ip, const rtime_eve
     static int jcount = 0;
     memset(&m_rtime_event_head, 0, sizeof(rtime_event_head));
     m_rtime_event_head = rtime_event_head;
-#ifndef DEBUG
+#ifdef DEBUG
     printfRtimeEventInfo();
 #endif
 
 #if 1
-            const char *pdata = (tcpRecvBlock.data()); // 获取图片数据
-            QString filePath,gidPath;
+            //const char *picData = (tcpRecvBlock.data()); // 获取图片数据
+            QString filePath,gidPath,fileName;
             QString strName;
-            int gid;
+            int gid,pid,age,gender;
             gid = m_rtime_event_head.gid;
+            pid = m_rtime_event_head.id;
+            age = m_rtime_event_head.age;
+            gender = m_rtime_event_head.gender;
             strName = QString(QLatin1String((char *)m_rtime_event_head.name));
             QString current = QDir::currentPath();
             current += "/recog";
             if(gid == 0)
             {
                 gidPath = QString("%1/unknow").arg(current);
+                fileName = QString("unknow%1.jpeg").arg(jcount);
+                jcount++;
             }
             else
             {
-                gidPath = QString("%1/group_%2").arg(current).arg(gid);
+                gidPath = QString("%1/group_%2").arg(current).arg(gid); /*文件目录*/
+                if(gender == 0)
+                    fileName = QString("group%1_pid%2_%3_man_age%4.jpeg").arg(gid).arg(pid).arg(strName).arg(age);
+                else{
+                    fileName = QString("group%1_pid%2_%3_woman_age%4.jpeg").arg(gid).arg(pid).arg(strName).arg(age);
+                }
             }
 
-            isDirExist(gidPath);
-            filePath = QString("%1/%2_%3.jpeg").arg(gidPath).arg(strName).arg(jcount);
+            isDirExist(gidPath);                                        /*如果不存在目录则创建，则创建*/
+            filePath = gidPath + "/" + fileName;
+
 
            // filePath = QString("%1/%2_%3_%4.jpeg").arg(current).arg(strName).arg(m_rtime_event_head.id).arg(jcount);
            // filePath = QString("%1/%2_recog.jpeg").arg(current).arg(jcount);
@@ -396,12 +422,14 @@ void RealEventWindow::onIsRealTimeRecvFinshed(const QString& ip, const rtime_eve
                  //return;
                  file.close();
              }else{
-                 file.write(pdata,tcpRecvBlock.size());
+                 //file.write(picData,tcpRecvBlock.size());
+                 file.write(tcpRecvBlock);
                  file.close();
              }
              showRecogPic(filePath);
              showRecogPicInfo();
-             jcount++;
+
+             //jcount++;
 #endif
 
 }
@@ -417,6 +445,11 @@ void RealEventWindow::btnStartClicked()
 
    //emit startRecvDataFromServer();
     startTcpRealEventThread();
+}
+
+void RealEventWindow::btnStopClicked()
+{
+    stopTcpRealEventThread();
 }
 
 

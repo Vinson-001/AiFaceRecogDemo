@@ -7,11 +7,13 @@
 #include "./toolsclass/xml/domxmlanalysisforudp.h"
 #include "./toolsclass/cmd/httpcmd.h"
 #include "./tcpclentobj.h"
+#include "./faceRecog/importmulfaceinfodlg.h"
 
 
-#define IN_Database "入库"
-#define OUT_Feature "抽feature"
+
 #define MAX_PIC_SIZE (300 * 1024)
+#define GroupMangerTable    "Group Manger"
+#define FaceQueryTable      "Face Query"
 class QToolButton;
 namespace Ui {
 class FaceRecogWindow;
@@ -25,13 +27,16 @@ public:
     explicit FaceRecogWindow(QWidget *parent = 0);
     ~FaceRecogWindow();
 
+    QString m_strDevID ;
+
 private:
     Ui::FaceRecogWindow *ui;
     //QList<QToolButton *> btns;
     MyTableViewForGroupManger* m_myTableForGroupManger;
+    MyTableViewForFaceQuery * m_myTableForFaceQuery;
     QNetworkReply *m_reply;
 
-    QString m_strRegisterPath;
+
     QMap<QString,QList<QString>> m_mapElement;
 
 
@@ -40,14 +45,20 @@ private:
     reply_head_t m_reply_head;                      /*接收消息头*/
     request_item_head_t m_item_head;                /*发送人员信息头*/
     reply_item_head_t m_reply_item_head;            /*接收信息头*/
-    face_request_server_context_t m_fr_context;     /* 总的结构*/
-    face_reply_server_context_t m_fr_reply_context; /* reply */
+    QList<reply_item_head_t> m_reply_item_head_list;
+   // face_request_server_context_t m_fr_context;     /* 总的结构*/
+    //face_reply_server_context_t m_fr_reply_context; /* reply */
     QString m_strPicPath;
     QString m_strAudioPath;
-    TcpClentObj *m_tcp_face_request;
     QString m_devIp;
     QString m_strDevName;                           /* 设备名字 */
-    char *m_feature_data;
+
+
+public:
+    TcpClentObj *m_tcp_face_request;
+    QString m_strRegisterPath;
+    /*特征值*/
+    QList<QByteArray> m_files_baData;
 
 private:
     void initForm();
@@ -79,14 +90,15 @@ private:
     void sendCmdForDeleteDataBase(QString strDevIP,QString par="1");
 
     /*人脸管理*/
-    void onSendData();
+    void onSendData();                          /*发送*/
     void updateDataHead();                      /*更新消息头*/
     void updateItemHead();                      /*更item头*/
     char *prepareFiles(QString strFilePath);    /*准备图片数据*/
+    quint64 prepareFiles(QString strFilePath, QByteArray &baData);
     //void updateFiles();                        /*准备文件数据*/
     qint64 sendDataToServer();                  /*入库操作*/
 
-    void checkSetSataus();                      /*检查设置状态*/
+    bool checkSetSataus();                      /*检查设置状态*/
     unsigned char * QStringToUChar(QString qstr,qint32 &size);
     void printfDataHead();                       /*打印数据头*/
     void printfItemHead();
@@ -96,10 +108,10 @@ private:
 
 
 public:
-    void addTabelViewRow(QList<QString> listText);
-    void removeTableRow();
-    void removeAllTable();
-    void updateDisplayTable(QMap<QString,QList<QString>> map);
+    void addTabelViewRow(QList<QString> listText,QString strType = GroupMangerTable);
+    void removeTableRow(QString strType = GroupMangerTable);
+    void removeAllTable(QString strType = GroupMangerTable);
+    void updateDisplayTable(QMap<QString,QList<QString>> map,QString strType = GroupMangerTable);
     QString getDataFromRowAndCol(int row,int col);
     int getDevIPFromID(QString strID, QString &strDevIp);  /*获取设备ID*/
 protected:
@@ -119,7 +131,6 @@ private slots:
     void onDeteleGroupBtnClicked();
     void onSerachGroupBtnClicked();
     void onSaveGroupBtnClicked();
-    void slotGroupMangerDoubleClicked(const QModelIndex &index);
     void myTableForGroupMangerClicked(const QModelIndex &index);
 
     /*数据库管理*/
@@ -132,12 +143,14 @@ private slots:
     void onOkBtnClicked();
     void onFaceQueryBtnClicked();   /*人脸查询*/
     void onSaveFilesBtnClicked(); /*保存特征值等文件*/
+    void onImportMulPicBtnClicked();
 
     void onOpsComboxIndexChanged(QString text);
     void onGenderComboxIndexChanged(QString text);
     void onNameLineEditChanged(const QString &text);
+    void onDevIdComboxIndexChanged(QString text);
 
-    void onRecvFinsed(int itype,char *data);
+    void onRecvFinsed(int itype,const QList<QByteArray> &baData);
 
 
 

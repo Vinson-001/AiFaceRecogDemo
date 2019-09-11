@@ -18,8 +18,21 @@
 #define REPLY_ITEM_HEAD_MAGIC          REQUEST_ITEM_HEAD_MAGIC
 #define REPLY_ITEM_HEAD_SIZE           32   /* 32 Bytes */
 
-#define INT_INLibrary                      0
-#define INT_OUTFeature                     1
+/*ops*/
+#define TEXT_INLibrary                 "入库"
+#define TEXT_OUTFeature                "抽feature"
+#define INT_INLibrary                  0
+#define INT_OUTFeature                 1
+#define STR_INLibrary                  "0"
+#define STR_OUTFeature                 "1"
+
+/*type*/
+#define TEXT_PIC_TYPE                  "图片"
+#define TEXT_PIC_IMG_TYPE              "图片+feature"
+#define INT_PIC_TYPE                   INT_INLibrary
+#define INT_PIC_IMG_TYPE               INT_OUTFeature
+#define STR_PIC_TYPE                   STR_INLibrary
+#define STR_PIC_IMG_TYPE               STR_OUTFeature
 typedef struct _request_head {
         quint8 magic[4];
         quint8 ops;
@@ -111,13 +124,16 @@ private:
     QString recvData;
     // 用来存放数据的大小信息
     quint16 blockSize;
-    QByteArray m_files_ba;
+    QList<QByteArray> m_files_ba;
 
-    /*reply_head_t reply_head;
-    reply_item_head_t reply_item_head;*/
+    bool isRecvHeadOk;
+    quint64 m_feature_size;
+    quint8 m_reply_objnum;
 public:
     face_reply_server_context_t m_fr_reply_context;
-    char *m_feature_buffer;
+    reply_head_t m_reply_head;
+    QList<reply_item_head_t> m_reply_item_head_list;
+    //char *m_feature_buffer;
 
 public:
     void newConnect(QString strIp,quint16 port);
@@ -127,21 +143,25 @@ public:
     /*发送*/
     int sendData(const char *buf,qint64 maxsize);   /* 发送单挑数据  */
     int readData(char *buf, qint64 maxsize);        /* 单次读取*/
-    qint64 sendDataToServer(face_request_server_context_t *fr_context);                         /*发送数据给下位机*/
 
 
+
+private:
     /*接收*/
 
     void readReplyhead(reply_head_t &reply_buff);
     void readReplyitem(reply_item_head_t &reply_buff);
+    void readReplyObj(int index,reply_item_head_t &reply_item_head,QByteArray &baData );
     char *readFiles(QByteArray ba, qint64 &maxsize);
-private:
+    void readFiles(QByteArray &baData,qint64 maxsize);
+
     void printfReplyHead();
     void printfReplyItemHead();
 
 
+
 signals:
-    void recvFinshed(int type,char *data);
+    void recvFinshed(int type,const QList<QByteArray> & ba);
 
 public slots:
     void readReplyDataFromServer();

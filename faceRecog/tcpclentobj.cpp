@@ -2,7 +2,7 @@
 #include <QFile>
 TcpClentObj::TcpClentObj(QObject *parent):
     QObject(parent),
-    m_feature_buffer(NULL)
+    isRecvHeadOk(false)
 {
     tcpSocket = new QTcpSocket(this);
     connect(tcpSocket, SIGNAL(readyRead()), this, SLOT(readReplyDataFromServer()));
@@ -17,7 +17,6 @@ TcpClentObj::~TcpClentObj()
         delete tcpSocket;
         tcpSocket = NULL;
     }
-    freeBuffer(m_feature_buffer);
     qDebug() << "TcpClentObj free";
 }
 /**
@@ -86,6 +85,7 @@ int TcpClentObj::readData(char *buf, qint64 maxsize)
 
     return -1;
 }
+#if 0
 /**
  * @function  sendDataToServer
  * @brief     入库操作
@@ -129,6 +129,7 @@ qint64 TcpClentObj::sendDataToServer(face_request_server_context_t *fr_context)
     return total;
 
 }
+#endif
 
 /**
  * @funcname  readReplyhead
@@ -151,6 +152,25 @@ void TcpClentObj::readReplyitem(reply_item_head_t &reply_buff)
     readData((char *)&reply_buff,REQUEST_HEAD_SIZE);
 }
 /**
+ * @funcname  readReplyObj
+ * @brief     读取一个obj           obj头            |objdata
+ *                                reply_item_head_t|QByteArray
+ * @param     index 索引
+ * @param     reply_item_head obj头
+ * @param     baData 数据值
+ * @return    no
+ */
+void TcpClentObj::readReplyObj(int index, reply_item_head_t &reply_item_head, QByteArray &baData)
+{
+    /*先读itemhead*/
+    memset(&reply_item_head,0,sizeof(reply_item_head_t));
+    readReplyitem(reply_item_head);
+    /*在读obj data(特征值)*/
+    quint64 size = reply_item_head.data_len_0;
+    readFiles(baData,size);
+
+}
+/**
  * @funcname  funcname
  * @brief     gaiyao
  * @param     ba 输入参数
@@ -163,6 +183,17 @@ char * TcpClentObj::readFiles(QByteArray ba, qint64 &maxsize)
     ba = tcpSocket->readAll();
     maxsize = ba.size();
     return ba.data();
+}
+
+void TcpClentObj::readFiles(QByteArray &baData,qint64 maxsize)
+{
+    int rtotal = 0;
+    while(rtotal != maxsize)  {
+        QByteArray ba;
+        ba = (tcpSocket->read(maxsize - rtotal));
+        rtotal += ba.size();
+        baData.append(ba);
+    }
 }
 
 void TcpClentObj::printfReplyHead()
@@ -194,8 +225,58 @@ void TcpClentObj::printfReplyItemHead()
 
 void TcpClentObj::readReplyDataFromServer()
 {
-    //QByteArray buffer;
-    //读取缓冲区数据
+    if(isRecvHeadOk == false) {     /*接收数据头*/
+        int recvLen = tcpSocket->bytesAvailable();
+        if(recvLen < sizeof(request_head_t)){   /*不能小于头,如果小于则返回*/
+            return;
+        }
+        else{
+            isRecvHeadOk = true;
+            m_reply_objnum = 0;
+            memset((char *)&m_reply_head,0,sizeof(reply_head_t));   /*首先接收头信息*/
+            readReplyhead(m_reply_head);
+            //m_fr_reply_context.reply_head = m_reply_item_head;
+            m_reply_objnum = m_reply_head.obj_num;
+            qDebug() << "m_reply_objnum:" << m_reply_objnum;
+        }
+    }
+    else{
+        /*读Item head*/
+        //memset((char *)&m_reply_item_head,0,sizeof(reply_item_head_t));   /*首先接收头信息*/
+        //readReplyitem(m_reply_item_head);
+        m_files_ba.clear();
+        m_reply_item_head_list.clear();
+        for(int i = 0; i < m_reply_objnum; i++){
+            QByteArray ba;
+            reply_item_head_t reply_item_head;
+            memset(&reply_item_head,0,sizeof(reply_item_head_t));
+            readReplyObj(i,reply_item_head,ba);
+            m_reply_item_head_list.append(reply_item_head);
+            m_files_ba.append(ba);
+
+        }
+        qDebug() << "m_reply_item_head_list.count()" << m_reply_item_head_list.count();
+
+        //m_feature_size = m_reply_item_head.data_len_0;
+       // m_files_ba.clear();
+       /* if(m_reply_objnum > 0){
+
+            QByteArray ba;
+            readFiles(ba,m_feature_size);
+            m_files_ba.append(ba);
+        }*/
+
+
+
+        emit recvFinshed(INT_INLibrary,m_files_ba);
+
+        //m_files_ba.clear();
+        //m_reply_item_head_list.clear();
+        m_feature_size = 0;
+        isRecvHeadOk = false;
+    }
+
+ #if 0
     /*1. 第一次读reply_head */
     static bool isReadHead = true;
     if(isReadHead)
@@ -248,7 +329,7 @@ void TcpClentObj::readReplyDataFromServer()
     }
     qDebug() << isReadHead ;
 
-
+#endif
 
 }
 

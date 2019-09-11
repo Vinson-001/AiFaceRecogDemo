@@ -36,8 +36,8 @@ SOURCES += main.cpp\
     faceRecog/tcpclentobj.cpp \
     RealEvent/realeventwindow.cpp \
     RealEvent/mytcpserverforrealevent.cpp \
-    RealEvent/myserverthreadforrealevent.cpp \
-    RealEvent/myrealeventsocket.cpp
+    RealEvent/myrealeventsocket.cpp \
+    faceRecog/importmulfaceinfodlg.cpp
 
 HEADERS  += logindlg.h \
     menu/menuwindow.h \
@@ -58,9 +58,8 @@ HEADERS  += logindlg.h \
     faceRecog/tcpclentobj.h \
     RealEvent/realeventwindow.h \
     RealEvent/mytcpserverforrealevent.h \
-    RealEvent/myserverthreadforrealevent.h \
-    RealEvent/processorrealevent \
-    RealEvent/myrealeventsocket.h
+    RealEvent/myrealeventsocket.h \
+    faceRecog/importmulfaceinfodlg.h
 
 FORMS    += logindlg.ui \
     menu/menuwindow.ui \
@@ -68,7 +67,8 @@ FORMS    += logindlg.ui \
     deviceManger/deviceMangerwindow.ui \
     faceRecog/facerecogwindow.ui \
     deviceManger/devinfosys.ui \
-    RealEvent/realeventwindow.ui
+    RealEvent/realeventwindow.ui \
+    faceRecog/importmulfaceinfodlg.ui
 
 RC_ICONS = ./qrc/image/main.ico
 
